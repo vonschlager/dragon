@@ -2,7 +2,7 @@ module Utils
     ( showAsText
     ) where
 
-import qualified Data.Text as T
+import Data.Text
 
 showAsText :: Show a => a -> Text
-showAsText = T.pack . show
+showAsText = pack . show
