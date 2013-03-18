@@ -20,15 +20,20 @@ import Application
 import Db
 import Utils
 
-mkPostSplice :: Post -> Splice AppHandler
-mkPostSplice p = runChildrenWithText
-    [ ("posttitle", title p)
-    , ("postbody", body p)
+renderPost :: Post -> Splice AppHandler
+renderPost p = runChildrenWithText
+    [ ("title", title p)
+    , ("body", body p)
+    , ("slug", slug p)
     , ("time", showAsText $ time p)
     ]
 
 handlePosts :: Handler App App ()
-handlePosts = undefined
+handlePosts = do
+    posts <- with db getPosts
+    heistLocal (splices posts) $ render "/index"
+  where
+    splices ps = bindSplices [("posts", mapSplices renderPost ps)]
 
 handlePost :: Handler App App ()
 handlePost = undefined

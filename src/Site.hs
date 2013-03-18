@@ -5,6 +5,7 @@ module Site
     ) where
 
 import Data.ByteString (ByteString)
+import Snap.Core
 import Snap.Snaplet
 import Snap.Snaplet.Auth
 import Snap.Snaplet.Auth.Backends.SqliteSimple
@@ -25,17 +26,18 @@ routes = [ ("/login", with auth handleLoginSubmit)
          , ("/posts", handlePosts)
          , ("/post/:postid", handlePost)
          , ("/post/delete/:postid", handlePostDelete)
+         , ("/", redirect "/posts")
          , ("", serveDirectory "static")
          ]
 
 app :: SnapletInit App App
 app = makeSnaplet "app" desc Nothing $ do
+    addRoutes routes
     h <- nestSnaplet "" heist $ heistInit "templates"
     s <- nestSnaplet "sess" sess $
             initCookieSessionManager "site_key.txt" "sess" (Just 3600)
     d <- nestSnaplet "db" db sqliteInit
     a <- nestSnaplet "auth" auth $ initSqliteAuth sess d
-    addRoutes routes
     addAuthSplices auth
     return $ App h s a d
   where
