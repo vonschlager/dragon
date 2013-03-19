@@ -1,4 +1,4 @@
-<apply template="base">
+<apply template="index">
 <form method="post" action="/post/add">
   <table>
     <tr>
@@ -6,9 +6,6 @@
     </tr>
     <tr>
       <td>body:</td><td><input type="text" name="body" size="20" /></td>
-    </tr>
-    <tr>
-      <td>slug:</td><td><input type="text" name="slug" size="20" /></td>
     </tr>
     <tr>
       <td></td><td><input type="submit" value="Send" /></td>

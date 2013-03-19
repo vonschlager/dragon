@@ -1,6 +1,9 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Utils
     ( showAsText
     , bs2text
+    , mkSlug
     ) where
 
 import Data.Text (Text)
@@ -14,3 +17,5 @@ showAsText = T.pack . show
 bs2text :: ByteString -> Text
 bs2text = T.decodeUtf8
 
+mkSlug :: Text -> Text
+mkSlug = T.replace " " "-" . T.toLower . T.strip

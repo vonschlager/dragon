@@ -3,11 +3,13 @@
 module Db
     ( Post (..)
     , getPosts
+    , getPost
     , savePost
     ) where
 
 import Control.Applicative
-import Data.Text
+import Control.Monad (liftM)
+import Data.Text (Text)
 import Data.Time.Clock
 import Snap.Snaplet
 import Snap.Snaplet.SqliteSimple
@@ -36,4 +38,8 @@ savePost p =
 
 getPosts :: Handler App Sqlite [Post]
 getPosts =
-    query_ "SELECT id,title,body,slug,time FROM posts"
+    query_ "SELECT id,title,body,slug,time FROM posts ORDER BY time DESC"
+
+getPost :: Text -> Handler App Sqlite Post
+getPost s =
+    liftM head $ query "SELECT id,title,body,slug,time FROM posts WHERE slug = ? LIMIT 1" [s]
