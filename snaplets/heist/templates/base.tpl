@@ -1,13 +1,10 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Snap web server</title>
-    <link rel="stylesheet" type="text/css" href="/screen.css"/>
-  </head>
+  <apply template="head"/>
   <body>
-    <div id="content">
-
+    <div id="main">
+      <apply template="nav"/>
       <apply-content/>
-
     </div>
   </body>
 </html>
