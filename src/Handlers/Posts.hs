@@ -56,6 +56,7 @@ handlePostAdd =
                                 (bs2text lslug)
                                 ltime
                 with db $ savePost post
+                redirect "/posts"
 
 handlePostEdit :: Handler App App ()
 handlePostEdit = undefined
