@@ -15,7 +15,7 @@ import Snap.Snaplet.SqliteSimple
 import Application
 
 data Post = Post
-    { postId :: Maybe Integer
+    { id :: Maybe Integer
     , title :: Text
     , body :: Text
     , slug :: Text
