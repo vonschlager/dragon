@@ -2,8 +2,8 @@
 
 module Handlers.Posts
     ( handlePosts
-    , handlePost
     , handlePostAdd
+    , handlePostView
     , handlePostEdit
     , handlePostDelete
     ) where
@@ -20,29 +20,28 @@ import Application
 import Db
 import Utils
 
-renderPost :: Post -> Splice AppHandler
-renderPost p = runChildrenWithText
-    [ ("title", title p)
-    , ("body", body p)
-    , ("slug", slug p)
-    , ("time", showAsText $ time p)
-    ]
-
 handlePosts :: Handler App App ()
 handlePosts = do
     posts <- with db getPosts
     heistLocal (splices posts) $ render "/index"
   where
     splices ps = bindSplices [("posts", mapSplices renderPost ps)]
+    renderPost :: Post -> Splice AppHandler
+    renderPost p = runChildrenWithText
+        [ ("title", title p)
+        , ("body", body p)
+        , ("slug", slug p)
+        , ("time", showAsText $ time p)
+        ]
 
-handlePost :: Handler App App ()
-handlePost = undefined
+handlePostView :: Handler App App ()
+handlePostView = undefined
 
 handlePostAdd :: Handler App App ()
 handlePostAdd =
     method GET renderPostAddForm <|> method POST handlePostSubmit
   where
-    renderPostAddForm = render "postadd"      
+    renderPostAddForm = render "/postaddform"      
     handlePostSubmit = do
         mtitle <- getPostParam "title"
         mbody <- getPostParam "body"
