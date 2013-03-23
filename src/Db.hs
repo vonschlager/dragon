@@ -10,11 +10,13 @@ module Db
 import Control.Applicative
 import Control.Monad (liftM)
 import Data.Text (Text)
+import qualified Data.Text as T
 import Data.Time.Clock
 import Snap.Snaplet
 import Snap.Snaplet.SqliteSimple
 
 import Application
+import Utils (showAsText, if')
 
 data Post = Post
     { id :: Maybe Integer
@@ -25,16 +27,15 @@ data Post = Post
     }
 
 instance FromRow Post where
-    fromRow = Post <$> field
-                   <*> field
-                   <*> field
-                   <*> field
-                   <*> field
+    fromRow = Post <$> field <*> field <*> field <*> field <*> field
 
 savePost :: Post -> Handler App Sqlite ()
-savePost p = 
+savePost p = do
+    rows <- query "SELECT id FROM posts WHERE slug = ?" [slug p] :: Handler App Sqlite [Only Integer]
+    let count = length rows 
+    let lslug = if' (count > 0) (T.concat [slug p, T.pack "-", (showAsText $ count + 1)]) $ slug p
     execute "INSERT INTO posts (title,body,slug,time) VALUES(?,?,?,?)"
-            (title p, body p, slug p, time p)
+        (title p, body p, lslug, time p)
 
 getPosts :: Handler App Sqlite [Post]
 getPosts =

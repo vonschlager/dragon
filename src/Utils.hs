@@ -4,6 +4,7 @@ module Utils
     ( showAsText
     , bs2text
     , mkSlug
+    , if'
     ) where
 
 import Data.Text (Text)
@@ -19,3 +20,7 @@ bs2text = T.decodeUtf8
 
 mkSlug :: Text -> Text
 mkSlug = T.replace " " "-" . T.toLower . T.strip
+
+if' :: Bool -> a -> a -> a
+if' True  x _ = x
+if' False _ y = y
