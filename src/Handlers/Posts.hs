@@ -10,6 +10,7 @@ module Handlers.Posts
 
 import Control.Applicative
 import Control.Monad.Trans
+import Data.Maybe (fromMaybe)
 import Data.Time
 import Heist.Interpreted
 import Snap.Core
@@ -22,9 +23,9 @@ import Utils
 
 renderPost :: Post -> Splice AppHandler
 renderPost p = runChildrenWithText
-    [ ("title", title p)
+    [ ("postid", showAsText $ fromMaybe 0 $ postid p)
+    , ("title", title p)
     , ("body", body p)
-    , ("slug", slug p)
     , ("time", showAsText $ time p)
     ]
 
@@ -37,11 +38,11 @@ handlePosts = do
 
 handlePostView :: Handler App App ()
 handlePostView = do
-    mslug <- getParam "slug"
-    case mslug of
+    mid <- getParam "postid"
+    case mid of
         Nothing -> writeBS "error"
-        Just lslug -> do
-            post <- with db $ getPost $ bs2text lslug
+        Just lid -> do
+            post <- with db $ getPost $ bs2integer lid
             heistLocal (splice post) $ render "/postview"
   where
     splice p = bindSplices [("post", renderPost p)]
@@ -61,7 +62,6 @@ handlePostAdd =
                 let post = Post Nothing
                                 (bs2text ltitle)
                                 (bs2text lbody)
-                                (mkSlug $ bs2text ltitle)
                                 ltime
                 with db $ savePost post
                 redirect "/posts"
@@ -70,4 +70,10 @@ handlePostEdit :: Handler App App ()
 handlePostEdit = undefined
 
 handlePostDelete :: Handler App App ()
-handlePostDelete = undefined
+handlePostDelete = do
+    mid <- getParam "postid"
+    case mid of
+        Nothing -> writeBS "error"
+        Just lid -> do
+            with db $ deletePost $ bs2integer lid
+            redirect "/posts"

@@ -2,6 +2,7 @@
 
 module Utils
     ( showAsText
+    , bs2integer
     , bs2text
     , mkSlug
     , if'
@@ -10,10 +11,13 @@ module Utils
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
-import Data.ByteString (ByteString)
+import Data.ByteString.Char8 as BS
 
 showAsText :: Show a => a -> Text
 showAsText = T.pack . show
+
+bs2integer :: ByteString -> Integer
+bs2integer = read . BS.unpack
 
 bs2text :: ByteString -> Text
 bs2text = T.decodeUtf8
