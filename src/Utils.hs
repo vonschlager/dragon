@@ -4,7 +4,6 @@ module Utils
     ( showAsText
     , bs2integer
     , bs2text
-    , mkSlug
     , if'
     ) where
 
@@ -21,9 +20,6 @@ bs2integer = read . BS.unpack
 
 bs2text :: ByteString -> Text
 bs2text = T.decodeUtf8
-
-mkSlug :: Text -> Text
-mkSlug = T.replace " " "-" . T.toLower . T.strip
 
 if' :: Bool -> a -> a -> a
 if' True  x _ = x

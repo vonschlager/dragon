@@ -17,6 +17,7 @@ import Snap.Util.FileServe
 import Application
 import Handlers.Auth
 import Handlers.Posts
+import Handlers.Navbar
 
 routes :: [(ByteString, Handler App App ())]
 routes = [ ("/login", with auth handleLoginSubmit)
@@ -27,6 +28,7 @@ routes = [ ("/login", with auth handleLoginSubmit)
          , ("/post/edit/:postid", handlePostEdit)
          , ("/post/delete/:postid", handlePostDelete)
          , ("/posts", handlePosts)
+         , ("/admin/navbar", handleNavbar)
          , ("/", redirect "/posts")
          , ("", serveDirectory "static")
          ]
@@ -39,6 +41,7 @@ app = makeSnaplet "app" desc Nothing $ do
             initCookieSessionManager "site_key.txt" "sess" (Just 3600)
     d <- nestSnaplet "db" db sqliteInit
     a <- nestSnaplet "auth" auth $ initSqliteAuth sess d
+    addSplices [("navbar", navbarSplice)]
     addAuthSplices auth
     return $ App h s a d
   where

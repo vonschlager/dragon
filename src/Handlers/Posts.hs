@@ -21,7 +21,7 @@ import Application
 import Db
 import Utils
 
-renderPost :: Post -> Splice AppHandler
+renderPost :: Post -> Splice (Handler App App)
 renderPost p = runChildrenWithText
     [ ("postid", showAsText $ fromMaybe 0 $ postid p)
     , ("title", title p)
