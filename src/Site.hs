@@ -27,9 +27,9 @@ routes = [ ("/login", with auth handleLoginSubmit)
          , ("/post/view/:postid", handlePostView)
          , ("/post/edit/:postid", handlePostEdit)
          , ("/post/delete/:postid", handlePostDelete)
-         , ("/posts", handlePosts)
+         , ("/post/kind/:kind", handlePostKind)
          , ("/admin/navbar", handleNavbar)
-         , ("/", redirect "/posts")
+         , ("/", redirect "/post/kind/news")
          , ("", serveDirectory "static")
          ]
 

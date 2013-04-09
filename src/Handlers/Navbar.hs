@@ -27,12 +27,12 @@ import Utils
 navbarSplice :: Splice (Handler App App)
 navbarSplice = do
     navbar <- lift $ with db getNavbar
-    return $ [X.TextNode $ name $ head navbar]
+    return $ zipWith mklink (map link navbar) (map name navbar)
 
 renderNavbar :: Navbar -> Splice (Handler App App)
 renderNavbar n = runChildrenWithText
     [ ("name", name n)
-    , ("kind", kind n)
+    , ("link", link n)
     ]
 
 handleNavbar :: Handler App App ()

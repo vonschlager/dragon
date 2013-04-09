@@ -1,5 +1,5 @@
 <div id="nav">
-  <navbar>
-    <name/>
-  </navbar>
+  <ul>
+    <navbar/>
+  </ul>
 </div>

@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Handlers.Posts
-    ( handlePosts
+    ( handlePostKind
     , handlePostAdd
     , handlePostView
     , handlePostEdit
@@ -29,10 +29,14 @@ renderPost p = runChildrenWithText
     , ("time", showAsText $ time p)
     ]
 
-handlePosts :: Handler App App ()
-handlePosts = do
-    posts <- with db getPosts
-    heistLocal (splices posts) $ render "/posts"
+handlePostKind :: Handler App App ()
+handlePostKind = do
+    mkind <- getParam "kind"
+    case mkind of
+        Nothing -> writeBS "error"
+        Just lkind -> do
+            posts <- with db $ getPostKind $ bs2text lkind
+            heistLocal (splices posts) $ render "/posts"
   where
     splices ps = bindSplices [("posts", mapSplices renderPost ps)]
 
@@ -55,13 +59,15 @@ handlePostAdd =
     handlePostSubmit = do
         mtitle <- getPostParam "title"
         mbody <- getPostParam "body"
+        mkind <- getPostParam "kind"
         ltime <- liftIO getCurrentTime
-        case sequence [mtitle, mbody] of
+        case sequence [mtitle, mbody, mkind] of
             Nothing -> writeBS "error"
-            (Just [ltitle, lbody]) -> do
+            (Just [ltitle, lbody, lkind]) -> do
                 let post = Post Nothing
                                 (bs2text ltitle)
                                 (bs2text lbody)
+                                (bs2text lkind)
                                 ltime
                 with db $ savePost post
                 redirect "/posts"
