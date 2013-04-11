@@ -1,5 +1,7 @@
 <div id="nav">
   <ul>
-    <navbar/>
+    <navbar>
+      <li><a href="${link}"><name/></a></li>
+    </navbar>
   </ul>
 </div>

@@ -3,6 +3,9 @@
 module Handlers.Navbar
     ( handleNavbar
     , handleNavbarAdd
+    , handleNavbarAddKind
+    , handleNavbarAddPost
+    , handleNavbarAddOther
     , handleNavbarEdit
     , handleNavbarDelete
     , navbarSplice
@@ -27,11 +30,18 @@ import Utils
 navbarSplice :: Splice (Handler App App)
 navbarSplice = do
     navbar <- lift $ with db getNavbar
-    return $ zipWith mklink (map link navbar) (map name navbar)
+    mapSplices renderLi navbar
+  where
+    renderLi :: Navbar -> Splice (Handler App App)
+    renderLi n = runChildrenWithText
+        [ ("link", link n)
+        , ("name", name n)
+        ]
 
 renderNavbar :: Navbar -> Splice (Handler App App)
 renderNavbar n = runChildrenWithText
-    [ ("name", name n)
+    [ ("entryid", showAsText $ fromMaybe 0 $ entryid n)
+    , ("name", name n)
     , ("link", link n)
     ]
 
@@ -42,11 +52,19 @@ handleNavbar = do
   where
     splices ne = bindSplices [("adminnavbar", mapSplices renderNavbar ne)]
 
+handleNavbarAddKind :: Handler App App ()
+handleNavbarAddKind = method GET $ render "/navbaraddkindform"
+
+handleNavbarAddPost :: Handler App App ()
+handleNavbarAddPost = method GET $ render "/navbaraddpostform"
+
+handleNavbarAddOther :: Handler App App ()
+handleNavbarAddOther = method GET $ render "/navbaraddotherform"
+
 handleNavbarAdd :: Handler App App ()
 handleNavbarAdd =
-    method GET renderNavbarAddForm <|> method POST handleNavbarSubmit
+    method POST handleNavbarSubmit
   where
-    renderNavbarAddForm = render "/navbaraddform"      
     handleNavbarSubmit = do
         mname <- getPostParam "name"
         mlink <- getPostParam "link"
@@ -59,7 +77,7 @@ handleNavbarAdd =
                                     (bs2text _link)
                                     (bs2integer _order)
                 with db $ saveNavbar navbar
-                redirect "/posts"
+                redirect "/admin/navbar"
 
 handleNavbarEdit :: Handler App App ()
 handleNavbarEdit = undefined
@@ -71,5 +89,5 @@ handleNavbarDelete = do
         Nothing -> writeBS "error"
         Just _id -> do
             with db $ deleteNavbar $ bs2integer _id
-            redirect "/posts"
+            redirect "/admin/navbar"
 

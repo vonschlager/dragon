@@ -10,7 +10,9 @@
     <tr>
       <td>kind:</td><td>
         <select name="kind">
-          <kinds/>
+          <kinds>
+            <option value="${kind}"><name/></option>
+          </kinds>
         </select>
       </td>
     </tr>

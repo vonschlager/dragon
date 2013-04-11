@@ -62,7 +62,7 @@ getPost i =
 
 getAllPosts :: Handler App Sqlite [Post]
 getAllPosts =
-    query_ "SELECT id,title,body,kind,time FROM posts WHERE kind = ?"
+    query_ "SELECT id,title,body,kind,time FROM posts"
 
 saveNavbar :: Navbar -> Handler App Sqlite ()
 saveNavbar n = do

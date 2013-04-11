@@ -18,7 +18,7 @@ import Application
 import Handlers.Auth
 import Handlers.Posts
 import Handlers.Navbar
-import Kinds
+import Splices
 
 routes :: [(ByteString, Handler App App ())]
 routes = [ ("/login", with auth handleLoginSubmit)
@@ -29,8 +29,13 @@ routes = [ ("/login", with auth handleLoginSubmit)
          , ("/post/edit/:postid", handlePostEdit)
          , ("/post/delete/:postid", handlePostDelete)
          , ("/post/kind/:kind", handlePostKind)
-         , ("/admin/navbar", handleNavbar)
+         , ("/navbar", handleNavbar)
          , ("/navbar/add", handleNavbarAdd)
+         , ("/navbar/add/kind", handleNavbarAddKind)
+         , ("/navbar/add/post", handleNavbarAddPost)
+         , ("/navbar/add/other", handleNavbarAddOther)
+         , ("/navbar/edit/:entryid", handleNavbarEdit)
+         , ("/navbar/delete/:entryid", handleNavbarDelete)
          , ("/", redirect "/post/kind/news")
          , ("", serveDirectory "static")
          ]
@@ -45,6 +50,7 @@ app = makeSnaplet "app" desc Nothing $ do
     a <- nestSnaplet "auth" auth $ initSqliteAuth sess d
     addSplices [ ("navbar", navbarSplice)
                , ("kinds", kindsSplice)
+               , ("posts", postsSplice)
                ]
     addAuthSplices auth
     return $ App h s a d
