@@ -49,14 +49,15 @@ handleNavbarAdd =
     renderNavbarAddForm = render "/navbaraddform"      
     handleNavbarSubmit = do
         mname <- getPostParam "name"
-        mkind <- getPostParam "kind"
-        case sequence [mname, mkind] of
+        mlink <- getPostParam "link"
+        morder <- getPostParam "order"
+        case sequence [mname, mlink, morder] of
             Nothing -> writeBS "error"
-            (Just [lname, lkind]) -> do
+            (Just [_name, _link, _order]) -> do
                 let navbar = Navbar Nothing
-                                    (bs2text lname)
-                                    (bs2text lkind)
-                                    0
+                                    (bs2text _name)
+                                    (bs2text _link)
+                                    (bs2integer _order)
                 with db $ saveNavbar navbar
                 redirect "/posts"
 
@@ -68,7 +69,7 @@ handleNavbarDelete = do
     mid <- getParam "entryid"
     case mid of
         Nothing -> writeBS "error"
-        Just lid -> do
-            with db $ deleteNavbar $ bs2integer lid
+        Just _id -> do
+            with db $ deleteNavbar $ bs2integer _id
             redirect "/posts"
 

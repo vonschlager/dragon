@@ -18,6 +18,7 @@ import Application
 import Handlers.Auth
 import Handlers.Posts
 import Handlers.Navbar
+import Kinds
 
 routes :: [(ByteString, Handler App App ())]
 routes = [ ("/login", with auth handleLoginSubmit)
@@ -29,6 +30,7 @@ routes = [ ("/login", with auth handleLoginSubmit)
          , ("/post/delete/:postid", handlePostDelete)
          , ("/post/kind/:kind", handlePostKind)
          , ("/admin/navbar", handleNavbar)
+         , ("/navbar/add", handleNavbarAdd)
          , ("/", redirect "/post/kind/news")
          , ("", serveDirectory "static")
          ]
@@ -41,7 +43,9 @@ app = makeSnaplet "app" desc Nothing $ do
             initCookieSessionManager "site_key.txt" "sess" (Just 3600)
     d <- nestSnaplet "db" db sqliteInit
     a <- nestSnaplet "auth" auth $ initSqliteAuth sess d
-    addSplices [("navbar", navbarSplice)]
+    addSplices [ ("navbar", navbarSplice)
+               , ("kinds", kindsSplice)
+               ]
     addAuthSplices auth
     return $ App h s a d
   where

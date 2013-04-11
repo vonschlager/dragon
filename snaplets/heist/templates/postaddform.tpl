@@ -8,9 +8,9 @@
       <td>body:</td><td><input type="text" name="body" size="20" /></td>
     </tr>
     <tr>
-      <td>body:</td><td>
+      <td>kind:</td><td>
         <select name="kind">
-          <option value="news">news
+          <kinds/>
         </select>
       </td>
     </tr>

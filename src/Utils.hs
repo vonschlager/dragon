@@ -6,6 +6,7 @@ module Utils
     , bs2text
     , if'
     , mklink
+    , mkoption
     ) where
 
 import Data.Text (Text)
@@ -29,3 +30,6 @@ if' False _ y = y
 
 mklink :: Text -> Text -> X.Node
 mklink target text = X.Element "li" [] $ [X.Element "a" [("href", target)] [X.TextNode text]]
+
+mkoption :: Text -> X.Node
+mkoption kind = X.Element "option" [("value", kind)] [X.TextNode kind]

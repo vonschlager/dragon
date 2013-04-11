@@ -4,6 +4,7 @@ module Db
     ( Post(..)
     , getPostKind
     , getPost
+    , getAllPosts
     , savePost
     , deletePost
     , Navbar(..)
@@ -58,6 +59,10 @@ getPostKind k =
 getPost :: Integer -> Handler App Sqlite Post
 getPost i =
     liftM head $ query "SELECT id,title,body,kind,time FROM posts WHERE id = ?" [i]
+
+getAllPosts :: Handler App Sqlite [Post]
+getAllPosts =
+    query_ "SELECT id,title,body,kind,time FROM posts WHERE kind = ?"
 
 saveNavbar :: Navbar -> Handler App Sqlite ()
 saveNavbar n = do
