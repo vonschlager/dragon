@@ -37,7 +37,7 @@ routes = [ ("/login", with auth handleLoginSubmit)
          , ("/navbar/edit/:entryid", handleNavbarEdit)
          , ("/navbar/delete/:entryid", handleNavbarDelete)
          , ("/", redirect "/post/kind/news")
-         , ("", serveDirectory "static")
+         , ("/static", serveDirectory "static")
          ]
 
 app :: SnapletInit App App
