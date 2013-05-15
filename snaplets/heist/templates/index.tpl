@@ -2,7 +2,7 @@
 <html>
   <apply template="head"/>
   <body>
-    <div id="main">
+    <div class="container">
       <apply template="nav"/>
       <apply-content/>
     </div>
