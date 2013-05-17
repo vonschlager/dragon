@@ -34,7 +34,8 @@ Executable dragon
     snaplet-sqlite-simple     >= 0.4.0   && < 0.5,
     text                      >= 0.11    && < 0.12,
     time                      >= 1.1     && < 1.5,
-    xmlhtml                   >= 0.1
+    xmlhtml                   >= 0.1,
+    network, HTTP, aeson
 
   if flag(old-base)
     build-depends:

@@ -18,6 +18,7 @@ import Application
 import Handlers.Auth
 import Handlers.Posts
 import Handlers.Navbar
+import Handlers.Galery
 import Splices
 
 routes :: [(ByteString, Handler App App ())]
@@ -36,6 +37,7 @@ routes = [ ("/login", with auth handleLoginSubmit)
          , ("/navbar/add/other", handleNavbarAddOther)
          , ("/navbar/edit/:entryid", handleNavbarEdit)
          , ("/navbar/delete/:entryid", handleNavbarDelete)
+         , ("/galery", handleGalery)
          , ("/", redirect "/post/kind/news")
          , ("/static", serveDirectory "static")
          ]
