@@ -5,20 +5,24 @@ module Site
     ) where
 
 import Data.ByteString (ByteString)
+import Data.Monoid
+import Data.Text (Text)
 import Snap.Core
 import Snap.Snaplet
 import Snap.Snaplet.Auth
 import Snap.Snaplet.Auth.Backends.SqliteSimple
-import Snap.Snaplet.Heist
+import Snap.Snaplet.Heist.Interpreted
 import Snap.Snaplet.Session.Backends.CookieSession
 import Snap.Snaplet.SqliteSimple
 import Snap.Util.FileServe
+import Heist
+import Heist.Interpreted
 
 import Application
 import Handlers.Auth
 import Handlers.Posts
 import Handlers.Navbar
-import Handlers.Galery
+import Handlers.Albums
 import Splices
 
 routes :: [(ByteString, Handler App App ())]
@@ -37,25 +41,27 @@ routes = [ ("/login", with auth handleLoginSubmit)
          , ("/navbar/add/other", handleNavbarAddOther)
          , ("/navbar/edit/:entryid", handleNavbarEdit)
          , ("/navbar/delete/:entryid", handleNavbarDelete)
-         , ("/galery", handleGalery)
+         , ("/albums", handleAlbums)
          , ("/", redirect "/post/kind/news")
          , ("/static", serveDirectory "static")
          ]
 
+splices :: [(Text, Splice (Handler App App))]
+splices = [ ("navbar", navbarSplice)
+          , ("kinds", kindsSplice)
+          , ("posts", postsSplice)
+          ]
+
 app :: SnapletInit App App
 app = makeSnaplet "app" desc Nothing $ do
     addRoutes routes
-    h <- nestSnaplet "" heist $ heistInit "templates"
+    h <- nestSnaplet "heist" heist $ heistInit "templates"
     s <- nestSnaplet "sess" sess $
             initCookieSessionManager "site_key.txt" "sess" (Just 3600)
     d <- nestSnaplet "db" db sqliteInit
     a <- nestSnaplet "auth" auth $ initSqliteAuth sess d
-    addSplices [ ("navbar", navbarSplice)
-               , ("kinds", kindsSplice)
-               , ("posts", postsSplice)
-               ]
-    addAuthSplices auth
+    addConfig h $ mempty { hcInterpretedSplices = splices }
+    --addAuthSplices auth
     return $ App h s a d
   where
     desc = "Strona domowa 7 DH Dragon"
-
