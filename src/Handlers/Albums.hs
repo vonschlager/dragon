@@ -6,17 +6,20 @@ module Handlers.Albums
 
 import Control.Applicative ((<$>), (<*>))
 import Control.Monad
+import Control.Monad.Trans (liftIO)
 import Data.Aeson
 import Data.Attoparsec (parse, IResult(..))
 import Data.Maybe
 import Data.Monoid
+import Data.Text (Text)
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.Lazy.Char8 as BL
 
 import System.IO.Streams (InputStream, OutputStream, stdout)
-import qualified System.IO.Streams as Streams
+import qualified System.IO.Streams as S
 import Network.Http.Client
 
+import Heist.Interpreted
 import Snap.Core (writeBS)
 import Snap.Snaplet
 import Snap.Snaplet.Heist
@@ -25,19 +28,18 @@ import Application
 import Utils
 
 data Album = Album
-    { albumid :: String
-    , title   :: String
+    { albumid :: Text
+    , title   :: Text
     , thumb   :: [Thumb]
     }
 
 newtype Albums = Albums [Album]
-    deriving Show
 
 data Thumb = Thumb
-    { url    :: String
+    { url    :: Text
     , width  :: Integer
     , height :: Integer
-    } deriving Show
+    }
 
 instance FromJSON Album where
     parseJSON (Object o) =
@@ -56,11 +58,6 @@ instance FromJSON Thumb where
                                  <*> o .: "width"
     parseJSON _          = mzero
 
-instance Show Album where
-    show a = "Album id: " ++ (albumid a) ++
-             " title: " ++ (title a) ++
-             " thumb: " ++ (show $ thumb a)
-
 picasaApiUrl = "http://picasaweb.google.com/data/feed/api/user/"
 
 picasaUser = "115396442595599374875"
@@ -71,34 +68,29 @@ picasaMethod = "json"
 
 picasaFields = "entry(media:group(media:title,media:thumbnail),gphoto:id)"
 
-decodeAlbums :: B.ByteString -> Maybe Albums
-decodeAlbums bs =
-    case parse json' bs of
-        Done _ v -> case fromJSON v of
-                        Success a -> Just a
-                        _         -> Nothing
-        _        -> Nothing
+jsonHandler :: FromJSON a => Response -> InputStream B.ByteString -> IO (Maybe a)
+jsonHandler p i = (decode . BL.fromChunks) <$> S.toList i
 
-getJSONbs :: IO B.ByteString
-getJSONbs = do
-    json <- get (picasaApiUrl <> picasaUser
+getAlbums :: Handler App App Albums
+getAlbums = do
+    malbums <- liftIO $ get (picasaApiUrl <> picasaUser
                 <> "?alt=" <> picasaMethod
                 <> "&v=" <> picasaApiVer
-                <> "&fields=" <> picasaFields) concatHandler
-    return json
-
-getJSON :: IO Albums
-getJSON = do
-    json <- getJSONbs
-    case decodeAlbums json of
+                <> "&fields=" <> picasaFields) jsonHandler
+    case malbums of
         Just albums -> return albums
-        Nothing     -> writeBS "WTF"
+        Nothing     -> return $ Albums []
 
-renderAlbums :: Albums -> Splice (Handler App App)
-renderAlbums as = runChildrenWithText
+renderAlbum :: Album -> Splice (Handler App App)
+renderAlbum a = runChildrenWithText
+    [ ("albumid", albumid a)
+    , ("title", title a)
+    , ("thumb", url $ head $ thumb a)
+    ]
 
 handleAlbums :: Handler App App ()
 handleAlbums = do
-    
-    
-
+    (Albums albums) <- getAlbums
+    heistLocal (splices albums) $ render "/albums"
+  where
+    splices as = bindSplices [("albums", mapSplices renderAlbum as)] 
