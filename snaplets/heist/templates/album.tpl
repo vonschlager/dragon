@@ -1,11 +1,11 @@
 <apply template="index">
 <ul class="thumbnails">
-<albums>
+<album>
   <li class="span2">
-    <a href="/album/${albumid}" class="thumbnail">
+    <a href="/photo/${photoid}" class="thumbnail">
       <img src="${thumb}" />
     </a>
   </li>
-</albums>
+</album>
 </ul>
 </apply>

@@ -42,6 +42,7 @@ routes = [ ("/login", with auth handleLoginSubmit)
          , ("/navbar/edit/:entryid", handleNavbarEdit)
          , ("/navbar/delete/:entryid", handleNavbarDelete)
          , ("/albums", handleAlbums)
+         , ("/album/:albumid", handleAlbum)
          , ("/", redirect "/post/kind/news")
          , ("/static", serveDirectory "static")
          ]
