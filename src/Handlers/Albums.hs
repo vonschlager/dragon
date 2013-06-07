@@ -8,24 +8,20 @@ import Control.Applicative ((<$>), (<*>))
 import Control.Monad
 import Control.Monad.Trans (liftIO)
 import Data.Aeson
-import Data.Attoparsec (parse, IResult(..))
-import Data.Maybe
 import Data.Monoid
 import Data.Text (Text)
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.Lazy.Char8 as BL
 
-import System.IO.Streams (InputStream, OutputStream, stdout)
+import System.IO.Streams (InputStream)
 import qualified System.IO.Streams as S
 import Network.Http.Client
 
 import Heist.Interpreted
-import Snap.Core (writeBS)
 import Snap.Snaplet
 import Snap.Snaplet.Heist
 
 import Application
-import Utils
 
 data Album = Album
     { albumid :: Text
@@ -37,8 +33,6 @@ newtype Albums = Albums [Album]
 
 data Thumb = Thumb
     { url    :: Text
-    , width  :: Integer
-    , height :: Integer
     }
 
 instance FromJSON Album where
@@ -54,22 +48,25 @@ instance FromJSON Albums where
 
 instance FromJSON Thumb where
     parseJSON (Object o) = Thumb <$> o .: "url"
-                                 <*> o .: "height"
-                                 <*> o .: "width"
     parseJSON _          = mzero
 
+picasaApiUrl :: B.ByteString
 picasaApiUrl = "http://picasaweb.google.com/data/feed/api/user/"
 
+picasaUser :: B.ByteString
 picasaUser = "115396442595599374875"
 
+picasaApiVer :: B.ByteString
 picasaApiVer = "2"
 
+picasaMethod :: B.ByteString
 picasaMethod = "json"
 
+picasaFields :: B.ByteString
 picasaFields = "entry(media:group(media:title,media:thumbnail),gphoto:id)"
 
 jsonHandler :: FromJSON a => Response -> InputStream B.ByteString -> IO (Maybe a)
-jsonHandler p i = (decode . BL.fromChunks) <$> S.toList i
+jsonHandler _ i = (decode . BL.fromChunks) <$> S.toList i
 
 getAlbums :: Handler App App Albums
 getAlbums = do

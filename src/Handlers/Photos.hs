@@ -8,14 +8,12 @@ import Control.Applicative ((<$>), (<*>))
 import Control.Monad
 import Control.Monad.Trans (liftIO)
 import Data.Aeson
-import Data.Attoparsec (parse, IResult(..))
-import Data.Maybe
 import Data.Monoid
 import Data.Text (Text)
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.Lazy.Char8 as BL
 
-import System.IO.Streams (InputStream, OutputStream, stdout)
+import System.IO.Streams (InputStream)
 import qualified System.IO.Streams as S
 import Network.Http.Client
 
@@ -25,7 +23,6 @@ import Snap.Snaplet
 import Snap.Snaplet.Heist
 
 import Application
-import Utils
 
 data Photo = Photo
     { purl  :: Text
@@ -36,8 +33,6 @@ newtype Photos = Photos [Photo]
 
 data Thumb = Thumb
     { turl   :: Text
-    , width  :: Integer
-    , height :: Integer
     }
 
 instance FromJSON Photo where
@@ -52,22 +47,25 @@ instance FromJSON Photos where
 
 instance FromJSON Thumb where
     parseJSON (Object o) = Thumb <$> o .: "url"
-                                 <*> o .: "height"
-                                 <*> o .: "width"
     parseJSON _          = mzero
 
+picasaApiUrl :: B.ByteString
 picasaApiUrl = "http://picasaweb.google.com/data/feed/api/user/"
 
+picasaUser :: B.ByteString
 picasaUser = "115396442595599374875"
 
+picasaApiVer :: B.ByteString
 picasaApiVer = "2"
 
+picasaMethod :: B.ByteString
 picasaMethod = "json"
 
+picasaFields :: B.ByteString
 picasaFields = "entry(media:group(media:thumbnail),content)"
 
 jsonHandler :: FromJSON a => Response -> InputStream B.ByteString -> IO (Maybe a)
-jsonHandler p i = (decode . BL.fromChunks) <$> S.toList i
+jsonHandler _ i = (decode . BL.fromChunks) <$> S.toList i
 
 getPhotos :: B.ByteString -> Handler App App Photos
 getPhotos aid = do
@@ -90,10 +88,10 @@ renderPhoto p = runChildrenWithText
 handlePhotos :: Handler App App ()
 handlePhotos = do
     maid <- getParam "albumid"
-    let aid = case maid of
-                Just aid -> aid
-                Nothing  -> "0"
-    (Photos photos) <- getPhotos aid
-    heistLocal (splices photos) $ render "/photos"
+    case maid of
+        Just aid -> do
+            (Photos photos) <- getPhotos aid
+            heistLocal (splices photos) $ render "/photos"
+        Nothing  -> writeBS "Error"
   where
     splices ps = bindSplices [("photos", mapSplices renderPhoto ps)] 

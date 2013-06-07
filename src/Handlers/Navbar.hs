@@ -11,17 +11,12 @@ module Handlers.Navbar
     , navbarSplice
     ) where
 
-import Control.Applicative
 import Control.Monad.Trans
-import Control.Monad
 import Data.Maybe (fromMaybe)
-import Data.Time
 import Heist.Interpreted
 import Snap.Core
 import Snap.Snaplet
 import Snap.Snaplet.Heist
-import Snap.Snaplet.SqliteSimple
-import qualified Text.XmlHtml as X
 
 import Application
 import Db
@@ -70,7 +65,6 @@ handleNavbarAdd =
         mlink <- getPostParam "link"
         morder <- getPostParam "order"
         case sequence [mname, mlink, morder] of
-            Nothing -> writeBS "error"
             (Just [_name, _link, _order]) -> do
                 let navbar = Navbar Nothing
                                     (bs2text _name)
@@ -78,6 +72,7 @@ handleNavbarAdd =
                                     (bs2integer _order)
                 with db $ saveNavbar navbar
                 redirect "/admin/navbar"
+            _ -> writeBS "error"
 
 handleNavbarEdit :: Handler App App ()
 handleNavbarEdit = undefined

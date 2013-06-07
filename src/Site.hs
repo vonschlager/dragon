@@ -9,7 +9,6 @@ import Data.Monoid
 import Data.Text (Text)
 import Snap.Core
 import Snap.Snaplet
-import Snap.Snaplet.Auth
 import Snap.Snaplet.Auth.Backends.SqliteSimple
 import Snap.Snaplet.Heist.Interpreted
 import Snap.Snaplet.Session.Backends.CookieSession

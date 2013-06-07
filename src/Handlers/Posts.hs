@@ -62,7 +62,6 @@ handlePostAdd =
         mkind <- getPostParam "kind"
         ltime <- liftIO getCurrentTime
         case sequence [mtitle, mbody, mkind] of
-            Nothing -> writeBS "error"
             (Just [ltitle, lbody, lkind]) -> do
                 let post = Post Nothing
                                 (bs2text ltitle)
@@ -71,6 +70,7 @@ handlePostAdd =
                                 ltime
                 with db $ savePost post
                 redirect "/posts"
+            _ -> writeBS "error"
 
 handlePostEdit :: Handler App App ()
 handlePostEdit = undefined

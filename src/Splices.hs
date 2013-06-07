@@ -5,18 +5,11 @@ module Splices
     , postsSplice
     ) where
 
-import Control.Applicative
 import Control.Monad.Trans
-import Control.Monad
 import Data.Maybe (fromMaybe)
 import Data.Text (Text)
-import Data.Time
 import Heist.Interpreted
-import Snap.Core
 import Snap.Snaplet
-import Snap.Snaplet.Heist
-import Snap.Snaplet.SqliteSimple
-import qualified Text.XmlHtml as X
 
 import Application
 import Db
