@@ -23,6 +23,7 @@ import Handlers.Auth
 import Handlers.Posts
 import Handlers.Navbar
 import Handlers.Albums
+import Handlers.Photos
 import Splices
 
 routes :: [(ByteString, Handler App App ())]
@@ -42,7 +43,7 @@ routes = [ ("/login", with auth handleLoginSubmit)
          , ("/navbar/edit/:entryid", handleNavbarEdit)
          , ("/navbar/delete/:entryid", handleNavbarDelete)
          , ("/albums", handleAlbums)
-         , ("/album/:albumid", handleAlbum)
+         , ("/photos/:albumid", handlePhotos)
          , ("/", redirect "/post/kind/news")
          , ("/static", serveDirectory "static")
          ]
