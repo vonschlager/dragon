@@ -1,7 +1,7 @@
 <apply template="index">
 <ul class="thumbnails">
 <photos>
-  <li class="span2">
+  <li class="span3">
     <a href="${url}" class="thumbnail">
       <img src="${thumb}" />
     </a>
