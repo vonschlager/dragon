@@ -73,6 +73,7 @@ getAlbums = do
     malbums <- liftIO $ get (picasaApiUrl <> picasaUser
                 <> "?alt=" <> picasaMethod
                 <> "&v=" <> picasaApiVer
+                <> "&thumbsize=130c"
                 <> "&fields=" <> picasaFields) jsonHandler
     case malbums of
         Just albums -> return albums

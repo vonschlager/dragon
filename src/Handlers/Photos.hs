@@ -73,7 +73,7 @@ getPhotos aid = do
                 <> "/albumid/" <> aid
                 <> "?alt=" <> picasaMethod
                 <> "&v=" <> picasaApiVer
-                <> "&thumbsize=180u&imgmax=800u"
+                <> "&thumbsize=130c&imgmax=800u"
                 <> "&fields=" <> picasaFields) jsonHandler
     case mphotos of
         Just photos -> return photos
