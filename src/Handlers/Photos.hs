@@ -18,7 +18,7 @@ import qualified System.IO.Streams as S
 import Network.Http.Client
 
 import Heist.Interpreted
-import Snap.Core (writeBS, getParam)
+import Snap.Core (writeBS, getParam, redirect)
 import Snap.Snaplet
 import Snap.Snaplet.Heist
 
@@ -77,7 +77,7 @@ getPhotos aid = do
                 <> "&fields=" <> picasaFields) jsonHandler
     case mphotos of
         Just photos -> return photos
-        Nothing     -> return $ Photos []
+        Nothing     -> redirect "/albums"
 
 renderPhoto :: Photo -> Splice (Handler App App)
 renderPhoto p = runChildrenWithText
