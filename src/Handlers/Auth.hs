@@ -2,40 +2,48 @@
 
 module Handlers.Auth
   ( handleLogin
-  , handleLoginSubmit
   , handleLogout
-  , handleNewUser
   ) where
 
 import           Control.Applicative
-import           Data.Maybe
-import qualified Data.Text as T
+import           Data.Text (Text)
 import           Snap.Core
 import           Snap.Snaplet
 import           Snap.Snaplet.Auth
 import           Snap.Snaplet.Heist
-import qualified Heist.Interpreted as I
+import           Text.Digestive
+import           Text.Digestive.Heist
+import           Text.Digestive.Snap
 
 import           Application
+import           Utils (text2bs, nonEmptyText)
 
-handleLogin :: Maybe T.Text -> Handler App (AuthManager App) ()
-handleLogin authError = heistLocal (I.bindSplices errs) $ render "login"
-  where
-    errs = [("loginError", I.textSplice c) | c <- maybeToList authError]
+data User = User
+    { login    :: Text
+    , password :: Text
+    }
 
-handleLoginSubmit :: Handler App (AuthManager App) ()
-handleLoginSubmit =
-    loginUser "login" "password" Nothing
-              (\_ -> handleLogin err) (redirect "/admin")
+loginForm :: Monad m => Form Text m User
+loginForm = User
+    <$> "login"    .: nonEmptyText
+    <*> "password" .: nonEmptyText
+
+handleLogin :: Handler App (AuthManager App) ()
+handleLogin = do
+    (view, mresult) <- runForm "login" loginForm 
+    case mresult of
+        Just user -> do 
+            elogin <- login' user    
+            case elogin of
+                Left  _ -> renderLogin view
+                Right _ -> redirect "/"
+          where
+            login' u = loginByUsername (text2bs $ login u)
+                                       (ClearText $ text2bs $ password u)
+                                       False
+        Nothing   -> renderLogin view
   where
-    err = Just "Unknown user or password"
+    renderLogin v = heistLocal (bindDigestiveSplices v) $ render "login" 
 
 handleLogout :: Handler App (AuthManager App) ()
 handleLogout = logout >> redirect "/"
-
-handleNewUser :: Handler App (AuthManager App) ()
-handleNewUser = method GET handleForm <|> method POST handleFormSubmit
-  where
-    handleForm = render "newuser"
-    handleFormSubmit = registerUser "login" "password" >> redirect "/admin"
-

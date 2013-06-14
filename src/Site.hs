@@ -26,9 +26,8 @@ import Handlers.Photos
 import Splices
 
 routes :: [(ByteString, Handler App App ())]
-routes = [ ("/login", with auth handleLoginSubmit)
+routes = [ ("/login", with auth handleLogin)
          , ("/logout", with auth handleLogout)
-         , ("/newuser", with auth handleNewUser)
          , ("/post/add", handlePostAdd)
          , ("/post/view/:postid", handlePostView)
          , ("/post/edit/:postid", handlePostEdit)
