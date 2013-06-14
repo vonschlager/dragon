@@ -3,7 +3,7 @@
   <apply template="head"/>
   <body>
     <div class="container">
-      <apply template="nav"/>
+      <apply template="navbar"/>
       <apply-content/>
     </div>
   </body>

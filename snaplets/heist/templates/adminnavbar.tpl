@@ -1,7 +1,11 @@
-<div id="nav">
-  <ul>
-    <adminnavbar>
-      <li><name/> <a href="/navbar/delete/${entryid}">delete</a>
-    </adminnavbar>
-  </ul>
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <ul class="nav">
+        <adminnavbar>
+          <li><a href="${link}"><name/></a></li>
+        </adminnavbar>
+      </ul>
+    </div>
+  </div>
 </div>

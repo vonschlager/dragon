@@ -5,18 +5,18 @@ module Handlers.Auth
   , handleLogout
   ) where
 
-import           Control.Applicative
-import           Data.Text (Text)
-import           Snap.Core
-import           Snap.Snaplet
-import           Snap.Snaplet.Auth
-import           Snap.Snaplet.Heist
-import           Text.Digestive
-import           Text.Digestive.Heist
-import           Text.Digestive.Snap
+import Control.Applicative
+import Data.Text (Text)
+import Snap.Core
+import Snap.Snaplet
+import Snap.Snaplet.Auth
+import Snap.Snaplet.Heist
+import Text.Digestive
+import Text.Digestive.Heist
+import Text.Digestive.Snap
 
-import           Application
-import           Utils (text2bs, nonEmptyText)
+import Application
+import Utils
 
 data User = User
     { login    :: Text
@@ -25,8 +25,8 @@ data User = User
 
 loginForm :: Monad m => Form Text m User
 loginForm = User
-    <$> "login"    .: nonEmptyText
-    <*> "password" .: nonEmptyText
+    <$> "login"    .: check' "Brak loginu"
+    <*> "password" .: check' "Brak hasła"
 
 handleLogin :: Handler App (AuthManager App) ()
 handleLogin = do
@@ -35,15 +35,15 @@ handleLogin = do
         Just user -> do 
             elogin <- login' user    
             case elogin of
-                Left  _ -> renderLogin view
-                Right _ -> redirect "/"
+                Left  _ -> bindDS view $ render "login-invalid"
+                Right _ -> redirect "/admin"
           where
-            login' u = loginByUsername (text2bs $ login u)
+            login' u = loginByUsername (login u)
                                        (ClearText $ text2bs $ password u)
                                        False
-        Nothing   -> renderLogin view
+        Nothing   -> bindDS view $ render "login"
   where
-    renderLogin v = heistLocal (bindDigestiveSplices v) $ render "login" 
+    bindDS v = heistLocal (bindDigestiveSplices v)
 
 handleLogout :: Handler App (AuthManager App) ()
 handleLogout = logout >> redirect "/"

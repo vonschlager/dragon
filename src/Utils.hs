@@ -6,7 +6,7 @@ module Utils
     , bs2text
     , text2bs
     , if'
-    , nonEmptyText
+    , check'
     ) where
 
 import Data.Text (Text)
@@ -31,5 +31,5 @@ if' :: Bool -> a -> a -> a
 if' True  x _ = x
 if' False _ y = y
 
-nonEmptyText :: Monad m => Form Text m Text
-nonEmptyText = check "Cannot be empty" (not . T.null) $ text Nothing
+check' :: Monad m => Text -> Form Text m Text
+check' err = check err (not . T.null) $ text Nothing
