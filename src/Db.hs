@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Db
-    ( Post(..)
+    ( DbPost(..)
     , getPostKind
     , getPost
     , getAllPosts
@@ -22,7 +22,7 @@ import Snap.Snaplet.SqliteSimple
 
 import Application
 
-data Post = Post
+data DbPost = DbPost
     { postid :: Maybe Integer
     , title :: Text
     , body :: Text
@@ -37,13 +37,13 @@ data Navbar = Navbar
     , order :: Integer
     }
 
-instance FromRow Post where
-    fromRow = Post <$> field <*> field <*> field <*> field <*> field
+instance FromRow DbPost where
+    fromRow = DbPost <$> field <*> field <*> field <*> field <*> field
 
 instance FromRow Navbar where
     fromRow = Navbar <$> field <*> field <*> field <*> field
 
-savePost :: Post -> Handler App Sqlite ()
+savePost :: DbPost -> Handler App Sqlite ()
 savePost p = do
     execute "INSERT INTO posts (title,body,kind,time) VALUES(?,?,?,?)"
         (title p, body p, kind p, time p)
@@ -52,15 +52,15 @@ deletePost :: Integer -> Handler App Sqlite ()
 deletePost i =
     execute "DELETE FROM posts WHERE id = ?" [i]
 
-getPostKind :: Text -> Handler App Sqlite [Post]
+getPostKind :: Text -> Handler App Sqlite [DbPost]
 getPostKind k =
     query "SELECT id,title,body,kind,time FROM posts WHERE kind = ?" [k]
 
-getPost :: Integer -> Handler App Sqlite Post
+getPost :: Integer -> Handler App Sqlite DbPost
 getPost i =
     liftM head $ query "SELECT id,title,body,kind,time FROM posts WHERE id = ?" [i]
 
-getAllPosts :: Handler App Sqlite [Post]
+getAllPosts :: Handler App Sqlite [DbPost]
 getAllPosts =
     query_ "SELECT id,title,body,kind,time FROM posts"
 

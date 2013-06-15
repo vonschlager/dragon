@@ -23,10 +23,12 @@ import Handlers.Posts
 import Handlers.Navbar
 import Handlers.Albums
 import Handlers.Photos
+import Handlers.Admin
 import Splices
 
 routes :: [(ByteString, Handler App App ())]
-routes = [ ("/admin", with auth handleLogin)
+routes = [ ("/admin", handleAdminPosts) 
+         , ("/admin/login", with auth handleLogin)
          , ("/admin/logout", with auth handleLogout)
          , ("/admin/navbar", handleNavbar)
          , ("/admin/navbar/add", handleNavbarAdd)
@@ -35,10 +37,10 @@ routes = [ ("/admin", with auth handleLogin)
          , ("/admin/navbar/add/other", handleNavbarAddOther)
          , ("/admin/navbar/edit/:entryid", handleNavbarEdit)
          , ("/admin/navbar/delete/:entryid", handleNavbarDelete)
-         , ("/post/add", handlePostAdd)
+         , ("/admin/post/add", handleAdminPostAdd)
+         , ("/admin/post/edit/:postid", handleAdminPostEdit)
+         , ("/admin/post/delete/:postid", handleAdminPostDelete)
          , ("/post/view/:postid", handlePostView)
-         , ("/post/edit/:postid", handlePostEdit)
-         , ("/post/delete/:postid", handlePostDelete)
          , ("/post/kind/:kind", handlePostKind)
          , ("/albums", handleAlbums)
          , ("/photos/:albumid", handlePhotos)
@@ -48,7 +50,6 @@ routes = [ ("/admin", with auth handleLogin)
 
 splices :: [(Text, Splice (Handler App App))]
 splices = [ ("navbar", navbarSplice)
-          , ("kinds", kindsSplice)
           , ("posts", postsSplice)
           ]
 
