@@ -29,9 +29,9 @@ data PostKind = News
     deriving (Eq)
 
 data FormPost = FormPost
-    { fptitle :: Text
-    , fpbody  :: Text
-    , fpkind  :: PostKind
+    { fptitle   :: Text
+    , fpbody    :: Text
+    , fpkind    :: PostKind
     }
 
 instance Show PostKind where
@@ -43,9 +43,9 @@ kinds = [ (News, "Wieść")
 
 postAddForm :: Monad m => Form Text m FormPost
 postAddForm = FormPost
-    <$> "title" .: check' "Brak tytułu"
-    <*> "body"  .: check' "Brak treści"
-    <*> "kind"  .: choice kinds Nothing
+    <$> "title"    .: check' "Brak tytułu"
+    <*> "body"     .: check' "Brak treści"
+    <*> "kind"     .: choice kinds Nothing
 
 renderPost :: DbPost -> Splice (Handler App App)
 renderPost p = runChildrenWithText
@@ -53,7 +53,8 @@ renderPost p = runChildrenWithText
     , ("title", title p)
     , ("kind", kind p)
     , ("body", body p)
-    , ("time", showAsText $ time p)
+    , ("creation", showAsText $ creation p)
+    , ("publish", showAsText $ publish p)
     ]
 
 handleAdminPosts :: Handler App App ()
@@ -74,6 +75,8 @@ handleAdminPostAdd = do
                                 (fpbody post)
                                 (T.toLower . T.pack $ show $ fpkind post)
                                 ltime
+                                ltime
+                                --(fppublish post)
             with db $ savePost dbpost
             redirect "/admin/wpisy"
         Nothing   -> bindDS view

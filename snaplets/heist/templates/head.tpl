@@ -26,4 +26,5 @@
     $("img.lazy").lazyload({effect:"fadeIn"});
   });
   </script>
+  <script src="/static/bootstrap-wysiwyg.js"/>
 </head>

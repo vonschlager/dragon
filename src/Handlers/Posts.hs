@@ -20,7 +20,8 @@ renderPost p = runChildrenWithText
     [ ("postid", showAsText $ fromMaybe 0 $ postid p)
     , ("title", title p)
     , ("body", body p)
-    , ("time", showAsText $ time p)
+    , ("creation", showAsText $ creation p)
+    , ("publish", showAsText $ publish p)
     ]
 
 handlePostKind :: Handler App App ()
