@@ -72,7 +72,7 @@ handleAdminPostAdd = do
                                 (T.toLower . T.pack $ show $ fpkind post)
                                 ltime
             with db $ savePost dbpost
-            redirect "/admin/posts"
+            redirect "/admin/wpisy"
         Nothing   -> bindDS view
   where
     bindDS v = heistLocal (bindDigestiveSplices v) $ render "admin-post-add"
@@ -86,5 +86,5 @@ handleAdminPostDelete = do
     case mid of
         Just pid -> do
             with db $ deletePost $ bs2integer pid
-            redirect "/admin/posts"
+            redirect "/admin/wpisy"
         Nothing -> writeBS "error"

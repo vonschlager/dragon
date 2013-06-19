@@ -26,17 +26,17 @@ import Handlers.Posts
 import Splices
 
 routes :: [(ByteString, Handler App App ())]
-routes = [ ("/admin", handleAdminPosts) 
-         , ("/admin/login", with auth handleLogin)
-         , ("/admin/logout", with auth handleLogout)
-         , ("/admin/post/add", handleAdminPostAdd)
-         , ("/admin/post/edit/:postid", handleAdminPostEdit)
-         , ("/admin/post/delete/:postid", handleAdminPostDelete)
-         , ("/post/view/:postid", handlePostView)
-         , ("/post/kind/:kind", handlePostKind)
-         , ("/albums", handleAlbums)
-         , ("/photos/:albumid", handlePhotos)
-         , ("/", redirect "/post/kind/news")
+routes = [ ("/admin/logowanie", with auth handleLogin)
+         , ("/admin/wyloguj", with auth handleLogout)
+         , ("/admin/wpisy", handleAdminPosts)
+         , ("/admin/wpis/dodaj", handleAdminPostAdd)
+         , ("/admin/wpis/edytuj/:postid", handleAdminPostEdit)
+         , ("/admin/wpis/usun/:postid", handleAdminPostDelete)
+         , ("/wpis/pokaz/:postid", handlePostView)
+         , ("/wpis/rodzaj/:kind", handlePostKind)
+         , ("/galeria", handleAlbums)
+         , ("/zdjecia/:albumid", handlePhotos)
+         , ("/", redirect "/wpis/rodzaj/wiesc")
          , ("/static", serveDirectory "static")
          ]
 

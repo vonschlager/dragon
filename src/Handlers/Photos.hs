@@ -77,7 +77,7 @@ getPhotos aid = do
                 <> "&fields=" <> picasaFields) jsonHandler
     case mphotos of
         Just photos -> return photos
-        Nothing     -> redirect "/albums"
+        Nothing     -> redirect "/galeria"
 
 renderPhoto :: Photo -> Splice (Handler App App)
 renderPhoto p = runChildrenWithText
