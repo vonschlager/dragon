@@ -41,6 +41,6 @@ handlePostView = do
         Nothing -> writeBS "error"
         Just lid -> do
             post <- with db $ getPost $ bs2integer lid
-            heistLocal (splice post) $ render "/postview"
+            heistLocal (splice post) $ render "/post-view"
   where
     splice p = bindSplices [("post", renderPost p)]

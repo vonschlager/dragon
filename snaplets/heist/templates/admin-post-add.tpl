@@ -1,6 +1,6 @@
 <apply template="admin">
 <div class="well span7 offset2">
-<dfForm action="/admin/post/add">
+<dfForm action="/admin/wpis/dodaj">
   <fieldset>
     <legend>Dodaj post</legend>
     <dfIfChildErrors>

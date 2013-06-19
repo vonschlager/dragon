@@ -4,7 +4,7 @@
   <body>
     <div class="container">
       <div class="well span5 offset3">
-        <dfForm action="/admin/login">
+        <dfForm action="/admin/logowanie">
           <fieldset>
             <legend>Logowanie</legend>
               <div class="alert alert-error">

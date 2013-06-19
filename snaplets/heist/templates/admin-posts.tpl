@@ -1,17 +1,18 @@
 <apply template="admin">
 <div>
-  <a href="/admin/post/add">Dodaj post</a>
+  <a href="/admin/wpis/dodaj">Nowy wpis</a>
 </div>
-<div class="span7 offset2">
-<table class="table table-hover table-bordered">
+<div class="span9 offset1">
+<table class="table table-hover">
   <thead>
   </thead>
   <tbody>
 <posts>
   <tr>
-    <td><a href="/post/view/${postid}"><title/></a></td>
-    <td><a href="/admin/post/edit/${postid}">Edytuj</a></td>
-    <td><a href="/admin/post/delete/${postid}">Usuń</a></td>
+    <td><a href="/wpis/pokaz/${postid}"><title/></a></td>
+    <td><kind/></td>
+    <td><a href="/admin/wpis/edytuj/${postid}">Edytuj</a></td>
+    <td><a href="/admin/wpis/usun/${postid}">Usuń</a></td>
   </tr>
 </posts>
   </tbody>
