@@ -2,9 +2,7 @@
   <div class="navbar-inner">
     <div class="container">
       <ul class="nav">
-        <navbar>
-          <li><a href="${link}"><name/></a></li>
-        </navbar>
+          <li><a href="Wie" ${active}><name/></a></li>
       </ul>
     </div>
   </div>

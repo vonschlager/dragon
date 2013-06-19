@@ -38,7 +38,7 @@ handleLogin = do
                 Left  _ -> bindDS view $ render "login-invalid"
                 Right _ -> redirect "/admin"
           where
-            login' u = loginByUsername (login u)
+            login' u = loginByUsername (text2bs $ login u)
                                        (ClearText $ text2bs $ password u)
                                        False
         Nothing   -> bindDS view $ render "login"

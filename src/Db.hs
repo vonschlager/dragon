@@ -30,18 +30,8 @@ data DbPost = DbPost
     , time :: UTCTime
     }
 
-data Navbar = Navbar
-    { entryid :: Maybe Integer
-    , name :: Text
-    , link :: Text
-    , order :: Integer
-    }
-
 instance FromRow DbPost where
     fromRow = DbPost <$> field <*> field <*> field <*> field <*> field
-
-instance FromRow Navbar where
-    fromRow = Navbar <$> field <*> field <*> field <*> field
 
 savePost :: DbPost -> Handler App Sqlite ()
 savePost p = do
@@ -63,17 +53,3 @@ getPost i =
 getAllPosts :: Handler App Sqlite [DbPost]
 getAllPosts =
     query_ "SELECT id,title,body,kind,time FROM posts"
-
-saveNavbar :: Navbar -> Handler App Sqlite ()
-saveNavbar n = do
-    execute "INSERT INTO navbar (name,link,ord) VALUES(?,?,?)"
-        (name n, link n, order n)
-
-deleteNavbar :: Integer -> Handler App Sqlite ()
-deleteNavbar i =
-    execute "DELETE FROM navbar WHERE id = ?" [i]
-
-getNavbar :: Handler App Sqlite [Navbar]
-getNavbar =
-    query_ "SELECT id,name,link,ord FROM navbar"
-
