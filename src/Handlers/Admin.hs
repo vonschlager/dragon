@@ -25,8 +25,8 @@ import Application
 import Db
 import Utils
 
-data PostKind = News | Article
-    deriving (Eq, Show)
+data PostKind = News
+    deriving (Eq)
 
 data FormPost = FormPost
     { fptitle :: Text
@@ -34,9 +34,11 @@ data FormPost = FormPost
     , fpkind  :: PostKind
     }
 
+instance Show PostKind where
+    show News = "wiesc"
+
 kinds :: [(PostKind, Text)]
 kinds = [ (News, "Wieść")
-        , (Article, "Artykuł")
         ]
 
 postAddForm :: Monad m => Form Text m FormPost
@@ -49,6 +51,7 @@ renderPost :: DbPost -> Splice (Handler App App)
 renderPost p = runChildrenWithText
     [ ("postid", showAsText $ fromMaybe 0 $ postid p)
     , ("title", title p)
+    , ("kind", kind p)
     , ("body", body p)
     , ("time", showAsText $ time p)
     ]

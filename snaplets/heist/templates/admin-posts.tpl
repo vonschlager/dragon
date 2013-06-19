@@ -2,7 +2,6 @@
 <div>
   <a href="/admin/wpis/dodaj">Nowy wpis</a>
 </div>
-<div class="span9 offset1">
 <table class="table table-hover">
   <thead>
   </thead>
@@ -17,5 +16,4 @@
 </posts>
   </tbody>
 </table>
-</div>
 </apply>
