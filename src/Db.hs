@@ -48,4 +48,4 @@ getPost i =
 
 getAllPosts :: Handler App Sqlite [DbPost]
 getAllPosts =
-    query_ "SELECT id,title,body,kind,time FROM posts"
+    query_ "SELECT id,title,body,kind,time FROM posts DESC"
