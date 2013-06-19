@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Handlers.Posts
-    ( handlePostKind
+    ( handleNews
     , handlePostView
     ) where
 
@@ -24,16 +24,12 @@ renderPost p = runChildrenWithText
     , ("publish", showAsText $ publish p)
     ]
 
-handlePostKind :: Handler App App ()
-handlePostKind = do
-    mkind <- getParam "kind"
-    case mkind of
-        Nothing -> writeBS "error"
-        Just lkind -> do
-            posts <- with db $ getPostKind $ bs2text lkind
-            heistLocal (splices posts) $ render "/posts"
+handleNews :: Handler App App ()
+handleNews = do
+    news <- with db $ getPostKind "wiesc"
+    heistLocal (splices news) $ render "/news"
   where
-    splices ps = bindSplices [("posts", mapSplices renderPost ps)]
+    splices ns = bindSplices [("news", mapSplices renderPost ns)]
 
 handlePostView :: Handler App App ()
 handlePostView = do

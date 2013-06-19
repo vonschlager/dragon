@@ -33,10 +33,10 @@ routes = [ ("/admin/logowanie", with auth handleLogin)
          , ("/admin/wpis/edytuj/:postid", handleAdminPostEdit)
          , ("/admin/wpis/usun/:postid", handleAdminPostDelete)
          , ("/wpis/pokaz/:postid", handlePostView)
-         , ("/wpis/rodzaj/:kind", handlePostKind)
+         , ("/wiesci", handleNews)
          , ("/galeria", handleAlbums)
          , ("/zdjecia/:albumid", handlePhotos)
-         , ("/", redirect "/wpis/rodzaj/wiesc")
+         , ("/", redirect "/wiesci")
          , ("/static", serveDirectory "static")
          ]
 
