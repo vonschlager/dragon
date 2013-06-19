@@ -7,10 +7,6 @@ module Db
     , getAllPosts
     , savePost
     , deletePost
-    , Navbar(..)
-    , getNavbar
-    , saveNavbar
-    , deleteNavbar
     ) where
 
 import Control.Applicative
