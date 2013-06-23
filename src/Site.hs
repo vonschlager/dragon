@@ -21,8 +21,8 @@ import Application
 import Handlers.Admin
 import Handlers.Albums
 import Handlers.Auth
+import Handlers.News
 import Handlers.Photos
-import Handlers.Posts
 import Splices
 
 routes :: [(ByteString, Handler App App ())]
@@ -34,6 +34,7 @@ routes = [ ("/admin/logowanie", with auth handleLogin)
          , ("/admin/wpis/usun/:postid", handleAdminPostDelete)
          , ("/wpis/pokaz/:postid", handlePostView)
          , ("/wiesci", handleNews)
+         , ("/wiesci/strona/:page", handleNewsRange)
          , ("/galeria", handleAlbums)
          , ("/zdjecia/:albumid", handlePhotos)
          , ("/", redirect "/wiesci")

@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Handlers.Posts
+module Handlers.News
     ( handleNews
+    , handleNewsRange
     , handlePostView
     ) where
 
@@ -28,6 +29,17 @@ handleNews :: Handler App App ()
 handleNews = do
     news <- with db $ getPostKind "wiesc"
     heistLocal (splices news) $ render "/news"
+  where
+    splices ns = bindSplices [("news", mapSplices renderPost ns)]
+
+handleNewsRange :: Handler App App ()
+handleNewsRange = do
+    mrange <- getParam "page"
+    case mrange of
+        Just range -> do
+            news <- with db $ getNewsRange $ bs2integer range
+            heistLocal (splices news) $ render "/news"
+        Nothing    -> redirect "/"
   where
     splices ns = bindSplices [("news", mapSplices renderPost ns)]
 

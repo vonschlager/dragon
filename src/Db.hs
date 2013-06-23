@@ -5,6 +5,8 @@ module Db
     , getPostKind
     , getPost
     , getAllPosts
+    , getNewsCount
+    , getNewsRange
     , savePost
     , deletePost
     ) where
@@ -36,6 +38,9 @@ instance FromRow DbPost where
                      <*> field
                      <*> field
 
+instance FromRow Integer where
+    fromRow = field
+
 savePost :: DbPost -> Handler App Sqlite ()
 savePost p = do
     flip execute (title p, body p, kind p, creation p, publish p) $
@@ -61,3 +66,12 @@ getAllPosts :: Handler App Sqlite [DbPost]
 getAllPosts =
     query_ $ "SELECT id,title,body,kind,creation,publish "
         <> "FROM posts ORDER BY publish DESC"
+
+getNewsCount :: Handler App Sqlite Integer
+getNewsCount =
+    liftM head $ query_ $ "SELECT COUNT(*) FROM posts WHERE kind = \"wiesc\""
+
+getNewsRange :: Integer -> Handler App Sqlite [DbPost]
+getNewsRange r =
+    flip query [(r-1)*5,5] $ "SELECT id,title,body,kind,creation,publish "
+        <> "FROM posts WHERE kind = 'wiesc' ORDER BY publish DESC LIMIT ?,?"
