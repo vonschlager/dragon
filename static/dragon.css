@@ -2,3 +2,12 @@ body {
   background: black;
   padding-top: 60px;
 }
+
+.thumbnail {
+  border-color: black;
+}
+
+a.thumbnail:hover,
+a.thumbnail:focus {
+  border-color: orange; 
+}
