@@ -11,7 +11,7 @@
   <div class="span9">
   <news>
     <h1><a href="/wpis/pokaz/${postid}"><title/></a></h1>
-    <p><body/></p>
+    <div><body/></div>
     <p><time/></p>
   </news>
   </div>
