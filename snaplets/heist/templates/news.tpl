@@ -1,11 +1,13 @@
 <apply template="index">
-<div class="row">
   <news>
-    <h3><a href="/wpis/pokaz/${postid}"><title/></a></h3>
-    <p><body/></p>
-    <p class="text-right">
-      <small><publish/></small>
-    </p>
+    <div>
+      <h3><a href="/wpis/pokaz/${postid}"><title/></a></h3>
+      <div>
+        <body/>
+      </div>
+      <p class="text-right">
+        <small><publish/></small>
+      </p>
+    </div>
   </news>
-</div>
 </apply>
