@@ -1,7 +1,7 @@
 <apply template="index">
   <news>
     <div>
-      <h3><a href="/wpis/pokaz/${postid}"><title/></a></h3>
+      <h3><a href="/wpis/pokaz/${id}"><title/></a></h3>
       <div>
         <body/>
       </div>

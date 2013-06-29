@@ -21,13 +21,13 @@ import Utils
 
 renderPost :: DbPost -> Splice (Handler App App)
 renderPost p = runChildrenWith
-    [ ("postid", textSplice . showAsText $ fromMaybe 0 $ postid p)
-    , ("title", textSplice $ title p)
-    , ("body", nodes $ body p)
-    , ("creation", textSplice . showAsText $ creation p)
-    , ("publish", textSplice . showAsText $ publish p)
+    [ ("id", textSplice . showAsText $ fromMaybe 0 $ pId p)
+    , ("title", textSplice $ pTitle p)
+    , ("body", nodes $ pBody p)
+    , ("creation", textSplice . showAsText $ pCreation p)
+    , ("publish", textSplice . showAsText $ pPublish p)
     ]
-  where nodes t = do case X.parseHTML (T.unpack $ title p) $ T.encodeUtf8 t of
+  where nodes t = do case X.parseHTML (T.unpack $ pTitle p) $ T.encodeUtf8 t of
                       Left err -> return [X.TextNode $ T.pack err]
                       Right d  -> return $ X.docContent d
 

@@ -49,12 +49,12 @@ postAddForm = FormPost
 
 renderPost :: DbPost -> Splice (Handler App App)
 renderPost p = runChildrenWithText
-    [ ("postid", showAsText $ fromMaybe 0 $ postid p)
-    , ("title", title p)
-    , ("kind", kind p)
-    , ("body", body p)
-    , ("creation", showAsText $ creation p)
-    , ("publish", showAsText $ publish p)
+    [ ("id", showAsText $ fromMaybe 0 $ pId p)
+    , ("title", pTitle p)
+    , ("kind", pKind p)
+    , ("body", pBody p)
+    , ("creation", showAsText $ pCreation p)
+    , ("publish", showAsText $ pPublish p)
     ]
 
 handleAdminPosts :: Handler App App ()

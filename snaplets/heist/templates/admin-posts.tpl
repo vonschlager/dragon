@@ -12,11 +12,11 @@
   <tbody>
 <posts>
   <tr>
-    <td><a href="/wpis/pokaz/${postid}"><title/></a></td>
+    <td><a href="/wpis/pokaz/${id}"><title/></a></td>
     <td><body/></td>
     <td><kind/></td>
-    <td><a class="btn btn-small" href="/admin/wpis/edytuj/${postid}">Edytuj</a></td>
-    <td><a class="btn btn-small btn-danger" href="/admin/wpis/usun/${postid}">Usuń</a></td>
+    <td><a class="btn btn-small" href="/admin/wpis/edytuj/${id}">Edytuj</a></td>
+    <td><a class="btn btn-small btn-danger" href="/admin/wpis/usun/${id}">Usuń</a></td>
   </tr>
 </posts>
   </tbody>

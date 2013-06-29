@@ -20,6 +20,6 @@ postsSplice = do
   where
     renderOption :: DbPost -> Splice (Handler App App)
     renderOption p = runChildrenWithText
-        [ ("postid", showAsText $ fromMaybe 0 $ postid p)
-        , ("title", title p)
+        [ ("postid", showAsText $ fromMaybe 0 $ pId p)
+        , ("title", pTitle p)
         ]

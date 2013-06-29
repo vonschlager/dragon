@@ -21,6 +21,7 @@ import Application
 import Handlers.Admin
 import Handlers.Albums
 import Handlers.Auth
+import Handlers.Guestbook
 import Handlers.News
 import Handlers.Photos
 import Splices
@@ -28,6 +29,7 @@ import Splices
 routes :: [(ByteString, Handler App App ())]
 routes = [ ("/admin/logowanie", with auth handleLogin)
          , ("/admin/wyloguj", with auth handleLogout)
+         , ("/admin", redirect "/admin/wpisy")
          , ("/admin/wpisy", handleAdminPosts)
          , ("/admin/wpis/dodaj", handleAdminPostAdd)
          , ("/admin/wpis/edytuj/:postid", handleAdminPostEdit)
@@ -35,6 +37,7 @@ routes = [ ("/admin/logowanie", with auth handleLogin)
          , ("/wpis/pokaz/:postid", handlePostView)
          , ("/wiesci", handleNews)
          , ("/wiesci/strona/:page", handleNewsRange)
+         , ("/ksiega", handleGuestbook)
          , ("/galeria", handleAlbums)
          , ("/zdjecia/:albumid", handlePhotos)
          , ("/", redirect "/wiesci")
