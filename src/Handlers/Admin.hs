@@ -55,7 +55,7 @@ renderPost p = runChildrenWithText
     [ ("id", showAsText $ fromMaybe 0 $ pId p)
     , ("title", pTitle p)
     , ("kind", pKind p)
-    , ("body", pBody p)
+    , ("body", T.take 50 $ pBody p)
     , ("creation", showAsText $ pCreation p)
     , ("publish", showAsText $ pPublish p)
     ]
@@ -66,7 +66,7 @@ renderGuestbook g = runChildrenWith
     , ("nick", textSplice $ gNick g)
     , ("email", textSplice $ gEmail g)
     , ("www", textSplice $ gWww g)
-    , ("body", textSplice $ gBody g)
+    , ("body", textSplice $ T.take 50 $ gBody g)
     , ("creation", textSplice . showAsText $ gCreation g)
     ]
 

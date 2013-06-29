@@ -1,4 +1,23 @@
 <apply template="index">
+<script src="/static/jquery.lazyload.min.js"/>
+<script>
+$(function(){
+  $("img.lazy").lazyload();
+});
+</script>
+<script src="/static/colorbox/jquery.colorbox-min.js"/>
+<script>
+$(document).ready(function(){
+  $(".cbox").colorbox({
+    next:"następne",
+    previous:"poprzednie",
+    current:"{current} z {total}",
+    close:"",
+    maxHeight:"700",
+    rel:"cbox"
+  });
+});
+</script>
 <ul class="thumbnails">
 <photos>
   <li class="span2">

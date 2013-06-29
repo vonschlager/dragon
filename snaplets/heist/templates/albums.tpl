@@ -1,4 +1,10 @@
 <apply template="index">
+<script src="/static/jquery.lazyload.min.js"/>
+<script>
+$(function(){
+  $("img.lazy").lazyload();
+});
+</script>
 <script type="text/javascript">
   $(function(){
     $('a.thumbnail').tooltip();
