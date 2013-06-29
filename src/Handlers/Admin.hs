@@ -5,6 +5,9 @@ module Handlers.Admin
     , handleAdminPostAdd
     , handleAdminPostEdit
     , handleAdminPostDelete
+    , handleAdminGuestbook
+    , handleAdminGuestbookEdit
+    , handleAdminGuestbookDelete
     ) where
 
 import Control.Applicative
@@ -57,6 +60,16 @@ renderPost p = runChildrenWithText
     , ("publish", showAsText $ pPublish p)
     ]
 
+renderGuestbook :: DbGuestbook -> Splice (Handler App App)
+renderGuestbook g = runChildrenWith
+    [ ("id", textSplice . showAsText $ fromMaybe 0 $ gId g)
+    , ("nick", textSplice $ gNick g)
+    , ("email", textSplice $ gEmail g)
+    , ("www", textSplice $ gWww g)
+    , ("body", textSplice $ gBody g)
+    , ("creation", textSplice . showAsText $ gCreation g)
+    ]
+
 handleAdminPosts :: Handler App App ()
 handleAdminPosts = do
     posts <- with db $ getAllPosts
@@ -76,7 +89,6 @@ handleAdminPostAdd = do
                                 (T.toLower . T.pack $ show $ fpkind post)
                                 ltime
                                 ltime
-                                --(fppublish post)
             with db $ savePost dbpost
             redirect "/admin/wpisy"
         Nothing   -> bindDS view
@@ -94,3 +106,22 @@ handleAdminPostDelete = do
             with db $ deletePost $ bs2integer pid
             redirect "/admin/wpisy"
         Nothing -> writeBS "error"
+
+handleAdminGuestbook :: Handler App App ()
+handleAdminGuestbook = do
+    guestbook <- with db $ getGuestbook
+    heistLocal (splices guestbook) $ render "/admin-guestbook"
+  where
+    splices gs = bindSplices [("guestbook", mapSplices renderGuestbook gs)]
+
+handleAdminGuestbookDelete :: Handler App App ()
+handleAdminGuestbookDelete = do
+    mid <- getParam "gid"
+    case mid of
+        Just gid -> do
+            with db $ deleteGuestbook $ bs2integer gid
+            redirect "/admin/ksiega"
+        Nothing -> writeBS "error"
+
+handleAdminGuestbookEdit :: Handler App App ()
+handleAdminGuestbookEdit = undefined

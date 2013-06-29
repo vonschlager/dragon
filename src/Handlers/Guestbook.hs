@@ -8,7 +8,6 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import Heist.Interpreted
-import Snap.Core
 import Snap.Snaplet
 import Snap.Snaplet.Heist
 import qualified Text.XmlHtml as X

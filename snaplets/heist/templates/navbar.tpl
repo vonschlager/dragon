@@ -2,7 +2,7 @@
   <div class="navbar-inner">
     <div class="container">
       <ul class="nav">
-          <li><a href="/wpis/rodzaj/wiesc">Wieści</a></li>
+          <li><a class="navbar-link" href="/wpis/rodzaj/wiesc">Wieści</a></li>
           <li><a href="/bohater">Bohater</a></li>
           <li><a href="/historia">Historia</a></li>
           <li><a href="/sklad">Skład</a></li>

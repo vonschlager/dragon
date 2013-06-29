@@ -11,6 +11,7 @@ module Db
     , deletePost
     , DbGuestbook(..)
     , getGuestbook
+    , deleteGuestbook
     ) where
 
 import Control.Applicative
@@ -99,3 +100,7 @@ getNewsRange :: Integer -> Handler App Sqlite [DbPost]
 getNewsRange r =
     flip query [(r-1)*5,5] $ "SELECT id,title,body,kind,creation,publish "
         <> "FROM posts WHERE kind = 'wiesc' ORDER BY publish DESC LIMIT ?,?"
+
+deleteGuestbook :: Integer -> Handler App Sqlite ()
+deleteGuestbook i =
+    execute "DELETE FROM guestbook WHERE id=?" [i]
