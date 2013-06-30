@@ -7,7 +7,12 @@ body {
 }
 
 .sidenav {
-  width: 100px;
-  vertical-align: middle;
-  display: inline-block;
+  width: 220px;
+}
+
+.sidenav.affix-top,
+.sidenav.affix,
+.sidenav.affix-bottom {
+  top: 60px;
+  position: fixed;
 }

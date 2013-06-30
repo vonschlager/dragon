@@ -38,4 +38,4 @@ sidenavSplice = do
         ]
     monthSplice :: Text -> Splice (Handler App App)
     monthSplice m = runChildrenWithText
-        [ ("month", m) ]
+        [ ("month", prettyMonth m) ]

@@ -6,17 +6,26 @@ $(function(){
 </script>
 <div class="row">
   <div class="span3 sidebar">
-    <ul class="nav nav-tabs nav-stacked sidenav">
+    <div class="accordion sidenav">
       <sidenav>
-        <li><a href="#"><year/></a>
-        <months>
-          <ul>
-            <li><a href="#"><month/></a></li>
-          </ul>
-        </months>
-        </li>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent=".sidenav" href="#${year}-months">
+              <year/>
+            </a>
+          </div>
+          <div id="${year}-months" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <ul class="nav nav-list">
+                <months>
+                  <li><a href="#"><month/></a></li>
+                </months>
+              </ul>
+            </div>
+          </div>
+        </div>
       </sidenav>
-    </ul>
+    </div>
   </div>
   <div class="span9">
     <news>
