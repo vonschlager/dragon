@@ -12,12 +12,15 @@ module Db
     , DbGuestbook(..)
     , getGuestbook
     , deleteGuestbook
+    , DbSideNav(..)
+    , getSideNav
     ) where
 
 import Control.Applicative
 import Control.Monad (liftM)
 import Data.Monoid ((<>))
 import Data.Text (Text)
+import qualified Data.Text as T
 import Data.Time.Clock
 import Snap.Snaplet
 import Snap.Snaplet.SqliteSimple
@@ -46,7 +49,7 @@ data DbGuestbook = DbGuestbook
     , gNick     :: Text
     , gEmail    :: Text
     , gWww      :: Text
-    , gBody    :: Text
+    , gBody     :: Text
     , gCreation :: UTCTime
     }
 
@@ -60,6 +63,14 @@ instance FromRow DbGuestbook where
 
 instance FromRow Integer where
     fromRow = field
+
+data DbSideNav = DbSideNav
+    { snyear   :: Text
+    , snmonths :: [Text]
+    }
+
+instance FromRow DbSideNav where
+    fromRow = DbSideNav <$> field <*> ((T.split (==',')) <$> field)
 
 savePost :: DbPost -> Handler App Sqlite ()
 savePost p = do
@@ -104,3 +115,9 @@ getNewsRange r =
 deleteGuestbook :: Integer -> Handler App Sqlite ()
 deleteGuestbook i =
     execute "DELETE FROM guestbook WHERE id=?" [i]
+
+getSideNav :: Handler App Sqlite [DbSideNav]
+getSideNav =
+    query_ $ "SELECT STRFTIME('%Y', publish) AS year,"
+        <> "GROUP_CONCAT(DISTINCT(STRFTIME('%m', publish))) "
+        <> "FROM posts GROUP BY year ORDER BY publish DESC"

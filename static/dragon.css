@@ -5,3 +5,9 @@ body {
 .tooltip {
   font-size: 14px;
 }
+
+.sidenav {
+  width: 100px;
+  vertical-align: middle;
+  display: inline-block;
+}
