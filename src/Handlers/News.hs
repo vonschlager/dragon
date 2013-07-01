@@ -59,12 +59,12 @@ handleNewsByYearMonth = do
         Just [year, month] -> do
             news <- with db $ getNewsByYearMonth (bs2text year)
                 (bs2text month)
-            heistLocal (splices news year) $ render "/news"
+            heistLocal (splices news (bs2text year, bs2text month)) $ render "/news"
         _                  -> redirect "/"
   where
-    splices ns y = bindSplices [ ("news", mapSplices renderPost ns)
-                               , ("sidenav", sidenavSplice $ bs2text y)
-                               ]
+    splices ns ym = bindSplices [ ("news", mapSplices renderPost ns)
+                                , ("sidenav", sidenavSplice ym)
+                                ]
 
 handlePostView :: Handler App App ()
 handlePostView = do

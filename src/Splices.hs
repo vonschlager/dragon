@@ -27,21 +27,23 @@ postsSplice = do
         , ("title", pTitle p)
         ]
 
-sidenavSplice :: Text -> Splice (Handler App App)
-sidenavSplice year = do
+sidenavSplice :: (Text, Text) -> Splice (Handler App App)
+sidenavSplice (year, month) = do
     sidenav <- lift $ with db getSideNav
     mapSplices renderSideNav sidenav
   where
     renderSideNav :: DbSideNav -> Splice (Handler App App)
     renderSideNav sn = runChildrenWith
         [ ("year", textSplice $ snyear sn) 
-        , ("months", mapSplices monthSplice $ snmonths sn)
+        , ("months", mapSplices monthSplice $
+                        zip (repeat $ snyear sn) $ snmonths sn)
         , ("in", textSplice $ if' (year == snyear sn) "in" "")
         ]
-    monthSplice :: Text -> Splice (Handler App App)
-    monthSplice m = runChildrenWithText
+    monthSplice :: (Text, Text) -> Splice (Handler App App)
+    monthSplice (y, m) = runChildrenWithText
         [ ("monthpretty", prettyMonth m)
         , ("month", m)
+        , ("autoactive", if' (month == m && year == y) "active" "")
         ]
 
 navbarSplice :: Splice (Handler App App)
