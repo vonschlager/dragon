@@ -3,6 +3,7 @@
 module Handlers.News
     ( handleNews
     , handleNewsRange
+    , handleNewsByYearMonth
     , handlePostView
     ) where
 
@@ -46,6 +47,19 @@ handleNewsRange = do
             news <- with db $ getNewsRange $ bs2integer range
             heistLocal (splices news) $ render "/news"
         Nothing    -> redirect "/"
+  where
+    splices ns = bindSplices [("news", mapSplices renderPost ns)]
+
+handleNewsByYearMonth :: Handler App App ()
+handleNewsByYearMonth = do
+    myear  <- getParam "year"
+    mmonth <- getParam "month"
+    case sequence [myear, mmonth] of
+        Just [year, month] -> do
+            news <- with db $ getNewsByYearMonth (bs2text year)
+                (bs2text month)
+            heistLocal (splices news) $ render "/news"
+        _                  -> redirect "/"
   where
     splices ns = bindSplices [("news", mapSplices renderPost ns)]
 

@@ -7,6 +7,7 @@ module Db
     , getAllPosts
     , getNewsCount
     , getNewsRange
+    , getNewsByYearMonth
     , savePost
     , deletePost
     , DbGuestbook(..)
@@ -111,6 +112,14 @@ getNewsRange :: Integer -> Handler App Sqlite [DbPost]
 getNewsRange r =
     flip query [(r-1)*5,5] $ "SELECT id,title,body,kind,creation,publish "
         <> "FROM posts WHERE kind = 'wiesc' ORDER BY publish DESC LIMIT ?,?"
+
+getNewsByYearMonth :: Text -> Text -> Handler App Sqlite [DbPost]
+getNewsByYearMonth y m =
+    flip query [y <> " " <> m] $
+        "SELECT id,title,body,kind,creation,publish "
+        <> "FROM posts WHERE kind = 'wiesc' "
+        <> "AND STRFTIME('%Y %m', publish) LIKE ? "
+        <> "ORDER BY publish DESC"
 
 deleteGuestbook :: Integer -> Handler App Sqlite ()
 deleteGuestbook i =
