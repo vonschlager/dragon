@@ -63,8 +63,8 @@ handleNewsByYearMonth = do
         _                  -> redirect "/"
   where
     splices ns y = bindSplices [ ("news", mapSplices renderPost ns)
-                             , ("sidenav", sidenavSplice $ bs2text y)
-                             ]
+                               , ("sidenav", sidenavSplice $ bs2text y)
+                               ]
 
 handlePostView :: Handler App App ()
 handlePostView = do

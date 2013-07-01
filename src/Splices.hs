@@ -3,6 +3,7 @@
 module Splices
     ( postsSplice
     , sidenavSplice
+    , navbarSplice
     ) where
 
 import Control.Monad.Trans
@@ -29,10 +30,10 @@ postsSplice = do
 sidenavSplice :: Text -> Splice (Handler App App)
 sidenavSplice year = do
     sidenav <- lift $ with db getSideNav
-    mapSplices renderSidenav sidenav
+    mapSplices renderSideNav sidenav
   where
-    renderSidenav :: DbSideNav-> Splice (Handler App App)
-    renderSidenav sn = runChildrenWith
+    renderSideNav :: DbSideNav -> Splice (Handler App App)
+    renderSideNav sn = runChildrenWith
         [ ("year", textSplice $ snyear sn) 
         , ("months", mapSplices monthSplice $ snmonths sn)
         , ("in", textSplice $ if' (year == snyear sn) "in" "")
@@ -41,4 +42,25 @@ sidenavSplice year = do
     monthSplice m = runChildrenWithText
         [ ("monthpretty", prettyMonth m)
         , ("month", m)
+        ]
+
+navbarSplice :: Splice (Handler App App)
+navbarSplice = do
+    mapSplices renderMenuItem
+        [ ("/wiesci/2012/05", "Wieści")
+        , ("/bohater", "Bohater")
+        , ("/historia", "Historia")
+        , ("/sklad", "Skład")
+        , ("/imprezy", "Imprezy")
+        , ("/zapalka", "Zapałka")
+        , ("/ksiega", "Księga gości")
+        , ("/galeria", "Galeria")
+        , ("/konstytucja", "Konstytucja")
+        , ("/onas", "O nas")
+        ]
+  where
+    renderMenuItem :: (Text, Text) -> Splice (Handler App App)
+    renderMenuItem (url, name) = runChildrenWithText
+        [ ("url", url)
+        , ("name", name)
         ]

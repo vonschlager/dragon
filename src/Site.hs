@@ -49,6 +49,7 @@ routes = [ ("/admin/logowanie", with auth handleLogin)
 
 splices :: [(Text, Splice (Handler App App))]
 splices = [ ("posts", postsSplice)
+          , ("navbar", navbarSplice)
           ]
 
 app :: SnapletInit App App
