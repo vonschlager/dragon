@@ -18,6 +18,7 @@ import qualified Text.XmlHtml as X
 
 import Application
 import Db
+import Splices
 import Utils
 
 renderPost :: DbPost -> Splice (Handler App App)
@@ -58,10 +59,12 @@ handleNewsByYearMonth = do
         Just [year, month] -> do
             news <- with db $ getNewsByYearMonth (bs2text year)
                 (bs2text month)
-            heistLocal (splices news) $ render "/news"
+            heistLocal (splices news year) $ render "/news"
         _                  -> redirect "/"
   where
-    splices ns = bindSplices [("news", mapSplices renderPost ns)]
+    splices ns y = bindSplices [ ("news", mapSplices renderPost ns)
+                             , ("sidenav", sidenavSplice $ bs2text y)
+                             ]
 
 handlePostView :: Handler App App ()
 handlePostView = do

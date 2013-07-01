@@ -14,7 +14,7 @@ $(function(){
               <year/>
             </a>
           </div>
-          <div id="${year}-months" class="accordion-body collapse">
+          <div id="${year}-months" class="accordion-body collapse ${in}">
             <div class="accordion-inner">
               <ul class="nav nav-list">
                 <months>

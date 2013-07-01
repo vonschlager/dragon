@@ -26,8 +26,8 @@ postsSplice = do
         , ("title", pTitle p)
         ]
 
-sidenavSplice :: Splice (Handler App App)
-sidenavSplice = do
+sidenavSplice :: Text -> Splice (Handler App App)
+sidenavSplice year = do
     sidenav <- lift $ with db getSideNav
     mapSplices renderSidenav sidenav
   where
@@ -35,6 +35,7 @@ sidenavSplice = do
     renderSidenav sn = runChildrenWith
         [ ("year", textSplice $ snyear sn) 
         , ("months", mapSplices monthSplice $ snmonths sn)
+        , ("in", textSplice $ if' (year == snyear sn) "in" "")
         ]
     monthSplice :: Text -> Splice (Handler App App)
     monthSplice m = runChildrenWithText
