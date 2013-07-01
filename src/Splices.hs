@@ -43,7 +43,7 @@ sidenavSplice (year, month) = do
     monthSplice (y, m) = runChildrenWithText
         [ ("monthpretty", prettyMonth m)
         , ("month", m)
-        , ("autoactive", if' (month == m && year == y) "active" "")
+        , ("active", if' (month == m && year == y) "active" "")
         ]
 
 navbarSplice :: Splice (Handler App App)

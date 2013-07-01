@@ -2,7 +2,7 @@
 <script src="/static/jquery.lazyload.min.js"/>
 <script>
 $(function(){
-  $("img.lazy").lazyload();
+  $("img.lazy").lazyload({effect:"fadeIn"});
 });
 </script>
 <script type="text/javascript">

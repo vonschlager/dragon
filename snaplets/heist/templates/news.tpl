@@ -18,7 +18,9 @@ $(function(){
             <div class="accordion-inner">
               <ul class="nav nav-list">
                 <months>
-                  <li class="${autoactive}"><a href="/wiesci/${year}/${month}"><monthpretty/></a></li>
+                  <li class="${active}">
+                    <a href="/wiesci/${year}/${month}"><monthpretty/></a>
+                  </li>
                 </months>
               </ul>
             </div>
