@@ -7,6 +7,7 @@ module Db
     , getAllPosts
     , getNewsCount
     , getNewsRange
+    , getNewsLastYearMonth
     , getNewsByYearMonth
     , savePost
     , deletePost
@@ -46,7 +47,7 @@ instance FromRow DbPost where
                      <*> field
 
 data DbGuestbook = DbGuestbook
-    { gId     :: Maybe Integer
+    { gId       :: Maybe Integer
     , gNick     :: Text
     , gEmail    :: Text
     , gWww      :: Text
@@ -112,6 +113,13 @@ getNewsRange :: Integer -> Handler App Sqlite [DbPost]
 getNewsRange r =
     flip query [(r-1)*5,5] $ "SELECT id,title,body,kind,creation,publish "
         <> "FROM posts WHERE kind = 'wiesc' ORDER BY publish DESC LIMIT ?,?"
+
+getNewsLastYearMonth :: Handler App Sqlite (Text, Text)
+getNewsLastYearMonth =
+    liftM head $ query_ $
+        "SELECT STRFTIME('%Y', publish),STRFTIME('%m', publish) "
+        <> "FROM (SELECT MAX(publish) AS publish "
+        <> "FROM posts WHERE kind = 'wiesc')"
 
 getNewsByYearMonth :: Text -> Text -> Handler App Sqlite [DbPost]
 getNewsByYearMonth y m =

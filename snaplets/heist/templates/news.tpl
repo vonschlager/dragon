@@ -32,7 +32,7 @@ $(function(){
   <div class="span9">
     <news>
       <div>
-        <h3><a href="/wpis/pokaz/${id}"><title/></a></h3>
+        <h3><title/></h3>
         <div>
           <body/>
         </div>

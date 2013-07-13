@@ -14,7 +14,8 @@ $(document).ready(function(){
     current:"{current} z {total}",
     close:"",
     maxHeight:"700",
-    rel:"cbox"
+    rel:"cbox",
+    transition:"fade"
   });
 });
 </script>

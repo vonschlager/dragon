@@ -49,7 +49,7 @@ sidenavSplice (year, month) = do
 navbarSplice :: Splice (Handler App App)
 navbarSplice = do
     mapSplices renderMenuItem
-        [ ("/wiesci/2012/05", "Wieści")
+        [ ("/wiesci", "Wieści")
         , ("/bohater", "Bohater")
         , ("/historia", "Historia")
         , ("/sklad", "Skład")

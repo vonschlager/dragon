@@ -1,10 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Handlers.News
-    ( handleNews
-    , handleNewsByYearMonth
+module Handlers.Match
+    ( handleMatch
+    , handlePostView
     ) where
 
+import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import Heist.Interpreted
@@ -20,7 +21,8 @@ import Utils
 
 renderPost :: DbPost -> Splice (Handler App App)
 renderPost p = runChildrenWith
-    [ ("title", textSplice $ pTitle p)
+    [ ("id", textSplice . showAsText $ fromMaybe 0 $ pId p)
+    , ("title", textSplice $ pTitle p)
     , ("body", nodes $ pBody p)
     , ("creation", textSplice . showAsText $ pCreation p)
     , ("publish", textSplice . showAsText $ pPublish p)
@@ -30,17 +32,11 @@ renderPost p = runChildrenWith
                       Right d  -> return $ X.docContent d
 
 handleNews :: Handler App App ()
-handleNews = handleNewsLatest
-
-handleNewsLatest :: Handler App App ()
-handleNewsLatest = do
-    (year, month) <- with db getNewsLastYearMonth
-    news <- with db $ getNewsByYearMonth year month
-    heistLocal (splices news (year, month)) $ render "/news"
+handleNews = do
+    news <- with db $ getPostKind "wiesc"
+    heistLocal (splices news) $ render "/news"
   where
-    splices ns ym = bindSplices [ ("news", mapSplices renderPost ns)
-                                , ("sidenav", sidenavSplice ym)
-                                ]
+    splices ns = bindSplices [("news", mapSplices renderPost ns)]
 
 handleNewsByYearMonth :: Handler App App ()
 handleNewsByYearMonth = do
@@ -50,8 +46,7 @@ handleNewsByYearMonth = do
         Just [year, month] -> do
             news <- with db $ getNewsByYearMonth (bs2text year)
                 (bs2text month)
-            heistLocal (splices news (bs2text year, bs2text month)) $
-                render "/news"
+            heistLocal (splices news (bs2text year, bs2text month)) $ render "/news"
         _                  -> redirect "/"
   where
     splices ns ym = bindSplices [ ("news", mapSplices renderPost ns)
