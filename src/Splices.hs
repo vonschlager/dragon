@@ -6,10 +6,13 @@ module Splices
     , navBarSplice
     ) where
 
+import Control.Monad
 import Control.Monad.Trans
-import Data.Text (Text)
 import Data.Maybe (fromMaybe)
+import Data.Text (Text)
+import qualified Data.Text as T
 import Heist.Interpreted
+import Snap.Core
 import Snap.Snaplet
 
 import Application
@@ -48,21 +51,25 @@ sideNavSplice (year, month) = do
 
 navBarSplice :: Splice (Handler App App)
 navBarSplice = do
+    rq <- getRequest
+    let ruri = bs2t $ rqURI rq
+    
     mapSplices renderMenuItem
-        [ ("/wiesci", "Wieści")
-        , ("/bohater", "Bohater")
-        , ("/historia", "Historia")
-        , ("/sklad", "Skład")
-        , ("/imprezy", "Imprezy")
-        , ("/zapalka", "Zapałka")
-        , ("/ksiega", "Księga gości")
-        , ("/galeria", "Galeria")
-        , ("/konstytucja", "Konstytucja")
-        , ("/onas", "O nas")
+        [ (ruri, "/wiesci", "Wieści")
+        , (ruri, "/bohater", "Bohater")
+        , (ruri, "/historia", "Historia")
+        , (ruri, "/sklad", "Skład")
+        , (ruri, "/imprezy", "Imprezy")
+        , (ruri, "/zapalka", "Zapałka")
+        , (ruri, "/ksiega", "Księga gości")
+        , (ruri, "/galeria", "Galeria")
+        , (ruri, "/konstytucja", "Konstytucja")
+        , (ruri, "/onas", "O nas")
         ]
   where
-    renderMenuItem :: (Text, Text) -> Splice (Handler App App)
-    renderMenuItem (url, name) = runChildrenWithText
-        [ ("url", url)
+    renderMenuItem :: (Text, Text, Text) -> Splice (Handler App App)
+    renderMenuItem (rurl, url, name) = runChildrenWithText
+        [ ("active", if' (url `T.isPrefixOf` rurl) "active" "")
+        , ("url", url)
         , ("name", name)
         ]

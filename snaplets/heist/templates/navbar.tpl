@@ -3,7 +3,7 @@
     <div class="container">
       <ul class="nav">
         <navbar>
-          <li><a href="${url}"><name/></a></li>
+          <li class="${active}"><a href="${url}"><name/></a></li>
         </navbar>
       </ul>
     </div>
