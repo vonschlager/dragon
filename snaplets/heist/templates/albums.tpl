@@ -3,12 +3,8 @@
 <script>
 $(function(){
   $("img.lazy").lazyload({effect:"fadeIn"});
+  $('a.thumbnail').tooltip();
 });
-</script>
-<script type="text/javascript">
-  $(function(){
-    $('a.thumbnail').tooltip();
-  });
 </script>
 <ul class="thumbnails">
 <albums>

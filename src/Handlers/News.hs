@@ -39,7 +39,7 @@ handleNewsLatest = do
     heistLocal (splices news (year, month)) $ render "/news"
   where
     splices ns ym = bindSplices [ ("news", mapSplices renderPost ns)
-                                , ("sidenav", sidenavSplice ym)
+                                , ("sidenav", sideNavSplice ym)
                                 ]
 
 handleNewsByYearMonth :: Handler App App ()
@@ -48,12 +48,12 @@ handleNewsByYearMonth = do
     mmonth <- getParam "month"
     case sequence [myear, mmonth] of
         Just [year, month] -> do
-            news <- with db $ getNewsByYearMonth (bs2text year)
-                (bs2text month)
-            heistLocal (splices news (bs2text year, bs2text month)) $
+            news <- with db $ getNewsByYearMonth (bs2t year)
+                (bs2t month)
+            heistLocal (splices news (bs2t year, bs2t month)) $
                 render "/news"
         _                  -> redirect "/"
   where
     splices ns ym = bindSplices [ ("news", mapSplices renderPost ns)
-                                , ("sidenav", sidenavSplice ym)
+                                , ("sidenav", sideNavSplice ym)
                                 ]

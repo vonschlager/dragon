@@ -5,17 +5,18 @@ module Db
     , getPostKind
     , getPost
     , getAllPosts
-    , getNewsCount
-    , getNewsRange
     , getNewsLastYearMonth
     , getNewsByYearMonth
+    , getMatch
     , savePost
     , deletePost
     , DbGuestbook(..)
     , getGuestbook
     , deleteGuestbook
-    , DbSideNav(..)
-    , getSideNav
+    , DbNewsSideNav(..)
+    , getNewsSideNav
+    , DbMatchSideNav(..)
+    , getMatchSideNav
     ) where
 
 import Control.Applicative
@@ -63,19 +64,23 @@ instance FromRow DbGuestbook where
                           <*> field
                           <*> field
 
-instance FromRow Integer where
-    fromRow = field
-
-data DbSideNav = DbSideNav
-    { snyear   :: Text
-    , snmonths :: [Text]
+data DbNewsSideNav = DbNewsSideNav
+    { nsnYear   :: Text
+    , nsnMonths :: [Text]
     }
 
-instance FromRow DbSideNav where
-    fromRow = DbSideNav <$> field <*> ((T.split (==',')) <$> field)
+instance FromRow DbNewsSideNav where
+    fromRow = DbNewsSideNav <$> field <*> (T.split (==',') <$> field)
+
+data DbMatchSideNav = DbMatchSideNav
+    { msnTitle :: Text
+    }
+
+instance FromRow DbMatchSideNav where
+    fromRow = DbMatchSideNav <$> field
 
 savePost :: DbPost -> Handler App Sqlite ()
-savePost p = do
+savePost p =
     flip execute (pTitle p, pBody p, pKind p, pCreation p, pPublish p) $
         "INSERT INTO posts (title,body,kind,creation,publish) "
         <> "VALUES(?,?,?,?,?)"
@@ -105,15 +110,6 @@ getGuestbook =
     query_ $ "SELECT id,nick,email,www,body,creation "
         <> "FROM guestbook ORDER BY creation DESC"
 
-getNewsCount :: Handler App Sqlite Integer
-getNewsCount =
-    liftM head $ query_ $ "SELECT COUNT(*) FROM posts WHERE kind = 'wiesc'"
-
-getNewsRange :: Integer -> Handler App Sqlite [DbPost]
-getNewsRange r =
-    flip query [(r-1)*5,5] $ "SELECT id,title,body,kind,creation,publish "
-        <> "FROM posts WHERE kind = 'wiesc' ORDER BY publish DESC LIMIT ?,?"
-
 getNewsLastYearMonth :: Handler App Sqlite (Text, Text)
 getNewsLastYearMonth =
     liftM head $ query_ $
@@ -129,12 +125,24 @@ getNewsByYearMonth y m =
         <> "AND STRFTIME('%Y %m', publish) LIKE ? "
         <> "ORDER BY publish DESC"
 
+getMatch :: Handler App Sqlite [DbPost]
+getMatch =
+    query_ $ "SELECT id,title,body,kind,creation,publish "
+        <> "FROM posts WHERE kind = 'zapalka' "
+        <> "ORDER BY publish DESC"
+
 deleteGuestbook :: Integer -> Handler App Sqlite ()
 deleteGuestbook i =
     execute "DELETE FROM guestbook WHERE id=?" [i]
 
-getSideNav :: Handler App Sqlite [DbSideNav]
-getSideNav =
+getNewsSideNav :: Handler App Sqlite [DbNewsSideNav]
+getNewsSideNav =
+    query_ $ "SELECT STRFTIME('%Y', publish) AS year,"
+        <> "GROUP_CONCAT(DISTINCT(STRFTIME('%m', publish))) "
+        <> "FROM posts GROUP BY year ORDER BY publish DESC"
+
+getMatchSideNav :: Handler App Sqlite [DbMatchSideNav]
+getMatchSideNav = 
     query_ $ "SELECT STRFTIME('%Y', publish) AS year,"
         <> "GROUP_CONCAT(DISTINCT(STRFTIME('%m', publish))) "
         <> "FROM posts GROUP BY year ORDER BY publish DESC"

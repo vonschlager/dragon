@@ -39,7 +39,7 @@ handleLogin = do
                 Right _ -> redirect "/admin"
           where
             login' u = loginByUsername (login u)
-                                       (ClearText $ text2bs $ password u)
+                                       (ClearText $ t2bs $ password u)
                                        False
         Nothing   -> bindDS view $ render "login"
   where

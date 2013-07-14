@@ -103,7 +103,7 @@ handleAdminPostDelete = do
     mid <- getParam "postid"
     case mid of
         Just pid -> do
-            with db $ deletePost $ bs2integer pid
+            with db $ deletePost $ bs2i pid
             redirect "/admin/wpisy"
         Nothing -> writeBS "error"
 
@@ -119,7 +119,7 @@ handleAdminGuestbookDelete = do
     mid <- getParam "gid"
     case mid of
         Just gid -> do
-            with db $ deleteGuestbook $ bs2integer gid
+            with db $ deleteGuestbook $ bs2i gid
             redirect "/admin/ksiega"
         Nothing -> writeBS "error"
 

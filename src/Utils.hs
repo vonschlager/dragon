@@ -2,9 +2,9 @@
 
 module Utils
     ( showAsText
-    , bs2integer
-    , bs2text
-    , text2bs
+    , bs2i
+    , bs2t
+    , t2bs
     , if'
     , check'
     , prettyMonth
@@ -19,14 +19,14 @@ import Text.Digestive
 showAsText :: Show a => a -> Text
 showAsText = T.pack . show
 
-bs2integer :: ByteString -> Integer
-bs2integer = read . BS.unpack
+bs2i :: ByteString -> Integer
+bs2i = read . BS.unpack
 
-bs2text :: ByteString -> Text
-bs2text = T.decodeUtf8
+bs2t :: ByteString -> Text
+bs2t = T.decodeUtf8
 
-text2bs :: Text -> ByteString
-text2bs = T.encodeUtf8
+t2bs :: Text -> ByteString
+t2bs = T.encodeUtf8
 
 if' :: Bool -> a -> a -> a
 if' True  x _ = x

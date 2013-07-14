@@ -2,8 +2,8 @@
 
 module Splices
     ( postsSplice
-    , sidenavSplice
-    , navbarSplice
+    , sideNavSplice
+    , navBarSplice
     ) where
 
 import Control.Monad.Trans
@@ -27,17 +27,17 @@ postsSplice = do
         , ("title", pTitle p)
         ]
 
-sidenavSplice :: (Text, Text) -> Splice (Handler App App)
-sidenavSplice (year, month) = do
-    sidenav <- lift $ with db getSideNav
-    mapSplices renderSideNav sidenav
+sideNavSplice :: (Text, Text) -> Splice (Handler App App)
+sideNavSplice (year, month) = do
+    sidenav <- lift $ with db getNewsSideNav
+    mapSplices renderNewsSideNav sidenav
   where
-    renderSideNav :: DbSideNav -> Splice (Handler App App)
-    renderSideNav sn = runChildrenWith
-        [ ("year", textSplice $ snyear sn) 
+    renderNewsSideNav :: DbNewsSideNav -> Splice (Handler App App)
+    renderNewsSideNav sn = runChildrenWith
+        [ ("year", textSplice $ nsnYear sn) 
         , ("months", mapSplices monthSplice $
-                        zip (repeat $ snyear sn) $ snmonths sn)
-        , ("in", textSplice $ if' (year == snyear sn) "in" "")
+                        zip (repeat $ nsnYear sn) $ nsnMonths sn)
+        , ("in", textSplice $ if' (year == nsnYear sn) "in" "")
         ]
     monthSplice :: (Text, Text) -> Splice (Handler App App)
     monthSplice (y, m) = runChildrenWithText
@@ -46,8 +46,8 @@ sidenavSplice (year, month) = do
         , ("active", if' (month == m && year == y) "active" "")
         ]
 
-navbarSplice :: Splice (Handler App App)
-navbarSplice = do
+navBarSplice :: Splice (Handler App App)
+navBarSplice = do
     mapSplices renderMenuItem
         [ ("/wiesci", "Wieści")
         , ("/bohater", "Bohater")

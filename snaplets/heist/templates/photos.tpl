@@ -1,13 +1,9 @@
 <apply template="index">
 <script src="/static/jquery.lazyload.min.js"/>
+<script src="/static/colorbox/jquery.colorbox-min.js"/>
 <script>
 $(function(){
   $("img.lazy").lazyload({effect:"fadeIn"});
-});
-</script>
-<script src="/static/colorbox/jquery.colorbox-min.js"/>
-<script>
-$(document).ready(function(){
   $(".cbox").colorbox({
     next:"następne",
     previous:"poprzednie",

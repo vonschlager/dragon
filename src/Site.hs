@@ -22,6 +22,7 @@ import Handlers.Admin
 import Handlers.Albums
 import Handlers.Auth
 import Handlers.Guestbook
+import Handlers.Match
 import Handlers.News
 import Handlers.Photos
 import Splices
@@ -47,7 +48,7 @@ routes = [ ("/admin/logowanie", with auth handleLogin)
 
 splices :: [(Text, Splice (Handler App App))]
 splices = [ ("posts", postsSplice)
-          , ("navbar", navbarSplice)
+          , ("navbar", navBarSplice)
           ]
 
 app :: SnapletInit App App
