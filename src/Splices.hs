@@ -53,23 +53,22 @@ navBarSplice :: Splice (Handler App App)
 navBarSplice = do
     rq <- getRequest
     let ruri = bs2t $ rqURI rq
-    
-    mapSplices renderMenuItem
-        [ (ruri, "/wiesci", "Wieści")
-        , (ruri, "/bohater", "Bohater")
-        , (ruri, "/historia", "Historia")
-        , (ruri, "/sklad", "Skład")
-        , (ruri, "/imprezy", "Imprezy")
-        , (ruri, "/zapalka", "Zapałka")
-        , (ruri, "/ksiega", "Księga gości")
-        , (ruri, "/galeria", "Galeria")
-        , (ruri, "/konstytucja", "Konstytucja")
-        , (ruri, "/onas", "O nas")
+    mapSplices (renderMenuItem ruri)
+        [ ("/wiesci", "Wieści")
+        , ("/bohater", "Bohater")
+        , ("/historia", "Historia")
+        , ("/sklad", "Skład")
+        , ("/imprezy", "Imprezy")
+        , ("/zapalka", "Zapałka")
+        , ("/ksiega", "Księga gości")
+        , ("/galeria", "Galeria")
+        , ("/konstytucja", "Konstytucja")
+        , ("/onas", "O nas")
         ]
   where
-    renderMenuItem :: (Text, Text, Text) -> Splice (Handler App App)
-    renderMenuItem (rurl, url, name) = runChildrenWithText
-        [ ("active", if' (url `T.isPrefixOf` rurl) "active" "")
-        , ("url", url)
+    renderMenuItem :: Text -> (Text, Text) -> Splice (Handler App App)
+    renderMenuItem ruri (uri, name) = runChildrenWithText
+        [ ("active", if' (uri `T.isPrefixOf` ruri) "active" "")
+        , ("url", uri)
         , ("name", name)
         ]
