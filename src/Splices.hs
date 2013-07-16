@@ -2,7 +2,7 @@
 
 module Splices
     ( postsSplice
-    , sideNavSplice
+    , newsSideNavSplice
     , navBarSplice
     ) where
 
@@ -33,8 +33,8 @@ postsSplice = do
         , ("title", pTitle p)
         ]
 
-sideNavSplice :: (Text, Text) -> Splice (Handler App App)
-sideNavSplice (year, month) = do
+newsSideNavSplice :: (Text, Text) -> Splice (Handler App App)
+newsSideNavSplice (year, month) = do
     sidenav <- lift $ with db getNewsSideNav
     mapSplices renderNewsSideNav sidenav
   where

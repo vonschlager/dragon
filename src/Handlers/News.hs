@@ -41,7 +41,7 @@ handleNewsLatest = do
     heistLocal (splices news (year, month)) $ render "/news"
   where
     splices ns ym = bindSplices [ ("news", mapSplices renderPost ns)
-                                , ("sidenav", sideNavSplice ym)
+                                , ("sidenav", newsSideNavSplice ym)
                                 ]
 
 handleNewsByYearMonth :: Handler App App ()
@@ -57,5 +57,5 @@ handleNewsByYearMonth = do
         _                  -> redirect "/"
   where
     splices ns ym = bindSplices [ ("news", mapSplices renderPost ns)
-                                , ("sidenav", sideNavSplice ym)
+                                , ("sidenav", newsSideNavSplice ym)
                                 ]
