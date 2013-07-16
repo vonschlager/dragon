@@ -39,7 +39,7 @@ check' :: Monad m => Text -> Form Text m Text
 check' err = check err (not . T.null) $ text Nothing
 
 mkElement :: Text -> [(Text, Text)] -> [Node] -> [Node]
-mkElement elem attrs ns = [X.Element "li" attrs ns]
+mkElement elem attrs ns = [X.Element elem attrs ns]
 
 prettyMonth :: Text -> Text
 prettyMonth m | m == "01" = "Styczeń"
