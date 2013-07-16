@@ -46,11 +46,16 @@ sideNavSplice (year, month) = do
         , ("in", textSplice $ if' (year == nsnYear sn) "in" "")
         ]
     monthSplice :: (Text, Text) -> Splice (Handler App App)
-    monthSplice (y, m) = runChildrenWithText
-        [ ("monthpretty", prettyMonth m)
-        , ("month", m)
-        , ("active", if' (month == m && year == y) "active" "")
-        ]
+    monthSplice (y, m) = do
+        nodes <- runChildrenWithText
+            [ ("monthpretty", prettyMonth m)
+            , ("month", m)
+            ]
+        return $ if month == m && year == y
+            then makeLi [("class","active")] nodes
+            else makeLi [] nodes
+    makeLi :: [(Text, Text)] -> [Node] -> [Node]
+    makeLi attrs ns = [X.Element "li" attrs ns]
 
 navBarSplice :: Splice (Handler App App)
 navBarSplice = do
@@ -71,12 +76,12 @@ navBarSplice = do
   where
     renderMenuItem :: Text -> (Text, Text) -> Splice (Handler App App)
     renderMenuItem ruri (uri, name) = do
-            nodes <- runChildrenWithText
-                [ ("url", uri)
-                , ("name", name)
-                ]
-            if (uri `T.isPrefixOf` ruri)
-                then return $ makeLi [("class","active")] nodes
-                else return $ makeLi [] nodes
+        nodes <- runChildrenWithText
+            [ ("url", uri)
+            , ("name", name)
+            ]
+        return $ if uri `T.isPrefixOf` ruri
+            then makeLi [("class","active")] nodes
+            else makeLi [] nodes
     makeLi :: [(Text, Text)] -> [Node] -> [Node]
-    makeLi c ns = [X.Element "li" c ns]
+    makeLi attrs ns = [X.Element "li" attrs ns]
