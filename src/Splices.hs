@@ -11,9 +11,12 @@ import Control.Monad.Trans
 import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import qualified Data.Text as T
+import Heist
 import Heist.Interpreted
 import Snap.Core
 import Snap.Snaplet
+import Text.XmlHtml (Node)
+import qualified Text.XmlHtml as X
 
 import Application
 import Db
@@ -67,8 +70,13 @@ navBarSplice = do
         ]
   where
     renderMenuItem :: Text -> (Text, Text) -> Splice (Handler App App)
-    renderMenuItem ruri (uri, name) = runChildrenWithText
-        [ ("active", if' (uri `T.isPrefixOf` ruri) "active" "")
-        , ("url", uri)
-        , ("name", name)
-        ]
+    renderMenuItem ruri (uri, name) = do
+            nodes <- runChildrenWithText
+                [ ("url", uri)
+                , ("name", name)
+                ]
+            if (uri `T.isPrefixOf` ruri)
+                then return $ makeLi [("class","active")] nodes
+                else return $ makeLi [] nodes
+    makeLi :: [(Text, Text)] -> [Node] -> [Node]
+    makeLi c ns = [X.Element "li" c ns]

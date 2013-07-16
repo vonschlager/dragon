@@ -5,6 +5,7 @@ module Handlers.News
     , handleNewsByYearMonth
     ) where
 
+import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import Heist.Interpreted
@@ -28,6 +29,7 @@ renderPost p = runChildrenWith
   where nodes t =  case X.parseHTML (T.unpack $ pTitle p) $ T.encodeUtf8 t of
                       Left err -> return [X.TextNode $ T.pack err]
                       Right d  -> return $ X.docContent d
+
 
 handleNews :: Handler App App ()
 handleNews = handleNewsLatest

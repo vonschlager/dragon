@@ -41,7 +41,7 @@ routes = [ ("/admin/logowanie", with auth handleLogin)
          , ("/wiesci/:year/:month", handleNewsByYearMonth)
          , ("/ksiega", handleGuestbook)
          , ("/galeria", handleAlbums)
-         , ("/zdjecia/:albumid", handlePhotos)
+         , ("/galeria/:albumid", handlePhotos)
          , ("/", redirect "/wiesci")
          , ("/static", serveDirectory "static")
          ]
