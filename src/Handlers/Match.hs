@@ -29,7 +29,7 @@ renderPost p = runChildrenWith
 
 handleMatch :: Handler App App ()
 handleMatch = do
-    match <- with db $ getMatch
+    match <- with db getMatch
     heistLocal (splices match) $ render "/match"
   where
     splices ps = bindSplices [ ("match", mapSplices renderPost ps)

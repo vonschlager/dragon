@@ -46,9 +46,9 @@ kinds = [ (News, "Wieść")
 
 postAddForm :: Monad m => Form Text m FormPost
 postAddForm = FormPost
-    <$> "title"    .: check' "Brak tytułu"
-    <*> "body"     .: check' "Brak treści"
-    <*> "kind"     .: choice kinds Nothing
+    <$> "title" .: check' "Brak tytułu"
+    <*> "body"  .: check' "Brak treści"
+    <*> "kind"  .: choice kinds Nothing
 
 renderPost :: DbPost -> Splice (Handler App App)
 renderPost p = runChildrenWithText
@@ -72,7 +72,7 @@ renderGuestbook g = runChildrenWith
 
 handleAdminPosts :: Handler App App ()
 handleAdminPosts = do
-    posts <- with db $ getAllPosts
+    posts <- with db getAllPosts
     heistLocal (splices posts) $ render "/admin-posts"
   where
     splices ps = bindSplices [("posts", mapSplices renderPost ps)]
@@ -109,7 +109,7 @@ handleAdminPostDelete = do
 
 handleAdminGuestbook :: Handler App App ()
 handleAdminGuestbook = do
-    guestbook <- with db $ getGuestbook
+    guestbook <- with db getGuestbook
     heistLocal (splices guestbook) $ render "/admin-guestbook"
   where
     splices gs = bindSplices [("guestbook", mapSplices renderGuestbook gs)]

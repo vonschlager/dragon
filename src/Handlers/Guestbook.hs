@@ -25,13 +25,13 @@ renderGuestbook g = runChildrenWith
     , ("body", nodes $ gBody g)
     , ("creation", textSplice . showAsText $ gCreation g)
     ]
-  where nodes t = do case X.parseHTML (T.unpack $ gNick g) $ T.encodeUtf8 t of
+  where nodes t = case X.parseHTML (T.unpack $ gNick g) $ T.encodeUtf8 t of
                       Left err -> return [X.TextNode $ T.pack err]
                       Right d  -> return $ X.docContent d
 
 handleGuestbook :: Handler App App ()
 handleGuestbook = do
-    guestbook <- with db $ getGuestbook
+    guestbook <- with db getGuestbook
     heistLocal (splices guestbook) $ render "/guestbook"
   where
     splices gs = bindSplices [("guestbook", mapSplices renderGuestbook gs)]
