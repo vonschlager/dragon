@@ -3,6 +3,7 @@
 module Splices
     ( postsSplice
     , newsSideNavSplice
+    , gbookSideNavSplice
     , navBarSplice
     ) where
 
@@ -38,7 +39,7 @@ newsSideNavSplice (year, month) = do
     sidenav <- lift $ with db getNewsSideNav
     mapSplices renderNewsSideNav sidenav
   where
-    renderNewsSideNav :: DbNewsSideNav -> Splice (Handler App App)
+    renderNewsSideNav :: DbYMSideNav -> Splice (Handler App App)
     renderNewsSideNav sn = runChildrenWith
         [ ("year", textSplice $ nsnYear sn) 
         , ("months", mapSplices monthSplice $
@@ -52,10 +53,30 @@ newsSideNavSplice (year, month) = do
             , ("month", m)
             ]
         return $ if month == m && year == y
-            then makeLi [("class","active")] nodes
-            else makeLi [] nodes
-    makeLi :: [(Text, Text)] -> [Node] -> [Node]
-    makeLi attrs ns = [X.Element "li" attrs ns]
+            then mkElement "li" [("class","active")] nodes
+            else mkElement "li" [] nodes
+
+gbookSideNavSplice :: (Text, Text) -> Splice (Handler App App)
+gbookSideNavSplice (year, month) = do
+    sidenav <- lift $ with db getGBookSideNav
+    mapSplices renderNewsSideNav sidenav
+  where
+    renderNewsSideNav :: DbYMSideNav -> Splice (Handler App App)
+    renderNewsSideNav sn = runChildrenWith
+        [ ("year", textSplice $ nsnYear sn) 
+        , ("months", mapSplices monthSplice $
+                        zip (repeat $ nsnYear sn) $ nsnMonths sn)
+        , ("in", textSplice $ if' (year == nsnYear sn) "in" "")
+        ]
+    monthSplice :: (Text, Text) -> Splice (Handler App App)
+    monthSplice (y, m) = do
+        nodes <- runChildrenWithText
+            [ ("monthpretty", prettyMonth m)
+            , ("month", m)
+            ]
+        return $ if month == m && year == y
+            then mkElement "li" [("class","active")] nodes
+            else mkElement "li" [] nodes
 
 navBarSplice :: Splice (Handler App App)
 navBarSplice = do
@@ -81,7 +102,5 @@ navBarSplice = do
             , ("name", name)
             ]
         return $ if uri `T.isPrefixOf` ruri
-            then makeLi [("class","active")] nodes
-            else makeLi [] nodes
-    makeLi :: [(Text, Text)] -> [Node] -> [Node]
-    makeLi attrs ns = [X.Element "li" attrs ns]
+            then mkElement "li" [("class","active")] nodes
+            else mkElement "li" [] nodes

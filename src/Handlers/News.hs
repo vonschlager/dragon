@@ -30,7 +30,6 @@ renderPost p = runChildrenWith
                       Left err -> return [X.TextNode $ T.pack err]
                       Right d  -> return $ X.docContent d
 
-
 handleNews :: Handler App App ()
 handleNews = handleNewsLatest
 

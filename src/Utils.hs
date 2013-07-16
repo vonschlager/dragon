@@ -7,6 +7,7 @@ module Utils
     , t2bs
     , if'
     , check'
+    , mkElement
     , prettyMonth
     ) where
 
@@ -15,6 +16,8 @@ import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import Data.ByteString.Char8 as BS
 import Text.Digestive
+import Text.XmlHtml (Node)
+import qualified Text.XmlHtml as X
 
 showAsText :: Show a => a -> Text
 showAsText = T.pack . show
@@ -34,6 +37,9 @@ if' False _ y = y
 
 check' :: Monad m => Text -> Form Text m Text
 check' err = check err (not . T.null) $ text Nothing
+
+mkElement :: Text -> [(Text, Text)] -> [Node] -> [Node]
+mkElement elem attrs ns = [X.Element "li" attrs ns]
 
 prettyMonth :: Text -> Text
 prettyMonth m | m == "01" = "Styczeń"

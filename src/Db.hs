@@ -5,16 +5,19 @@ module Db
     , getPostKind
     , getPost
     , getAllPosts
-    , getNewsLastYearMonth
     , getNewsByYearMonth
+    , getNewsLastYearMonth
     , getMatch
     , savePost
     , deletePost
     , DbGuestbook(..)
     , getGuestbook
+    , getGBookByYearMonth
+    , getGBookLastYearMonth
     , deleteGuestbook
-    , DbNewsSideNav(..)
+    , DbYMSideNav(..)
     , getNewsSideNav
+    , getGBookSideNav
     , DbMatchSideNav(..)
     , getMatchSideNav
     ) where
@@ -64,13 +67,13 @@ instance FromRow DbGuestbook where
                           <*> field
                           <*> field
 
-data DbNewsSideNav = DbNewsSideNav
+data DbYMSideNav = DbYMSideNav
     { nsnYear   :: Text
     , nsnMonths :: [Text]
     }
 
-instance FromRow DbNewsSideNav where
-    fromRow = DbNewsSideNav <$> field <*> (T.split (==',') <$> field)
+instance FromRow DbYMSideNav where
+    fromRow = DbYMSideNav <$> field <*> (T.split (==',') <$> field)
 
 data DbMatchSideNav = DbMatchSideNav
     { msnTitle :: Text
@@ -110,6 +113,21 @@ getGuestbook =
     query_ $ "SELECT id,nick,email,www,body,creation "
         <> "FROM guestbook ORDER BY creation DESC"
 
+getGBookByYearMonth :: Text -> Text -> Handler App Sqlite [DbGuestbook]
+getGBookByYearMonth y m =
+    flip query [y <> " " <> m] $
+        "SELECT id,nick,email,www,body,creation "
+        <> "FROM guestbook "
+        <> "WHERE STRFTIME('%Y %m', creation) LIKE ? "
+        <> "ORDER BY creation DESC"
+
+getGBookLastYearMonth :: Handler App Sqlite (Text, Text)
+getGBookLastYearMonth =
+    liftM head $ query_ $
+        "SELECT STRFTIME('%Y', creation),STRFTIME('%m', creation) "
+        <> "FROM (SELECT MAX(creation) AS creation "
+        <> "FROM guestbook)"
+
 getNewsLastYearMonth :: Handler App Sqlite (Text, Text)
 getNewsLastYearMonth =
     liftM head $ query_ $
@@ -135,11 +153,17 @@ deleteGuestbook :: Integer -> Handler App Sqlite ()
 deleteGuestbook i =
     execute "DELETE FROM guestbook WHERE id=?" [i]
 
-getNewsSideNav :: Handler App Sqlite [DbNewsSideNav]
+getNewsSideNav :: Handler App Sqlite [DbYMSideNav]
 getNewsSideNav =
     query_ $ "SELECT STRFTIME('%Y', publish) AS year,"
         <> "GROUP_CONCAT(DISTINCT(STRFTIME('%m', publish))) "
         <> "FROM posts GROUP BY year ORDER BY publish DESC"
+
+getGBookSideNav :: Handler App Sqlite [DbYMSideNav]
+getGBookSideNav =
+    query_ $ "SELECT STRFTIME('%Y', creation) AS year,"
+        <> "GROUP_CONCAT(DISTINCT(STRFTIME('%m', creation))) "
+        <> "FROM guestbook GROUP BY year ORDER BY creation DESC"
 
 getMatchSideNav :: Handler App Sqlite [DbMatchSideNav]
 getMatchSideNav = 
