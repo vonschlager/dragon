@@ -10,7 +10,7 @@ $(function(){
 <albums>
   <li class="span2">
     <a href="/galeria/${albumid}" class="thumbnail" title="${title}">
-      <img class="lazy" data-original="${thumb}" src="/static/whitedot.gif" alt="" width="130" height="130" />
+      <img class="lazy" data-original="${thumb}" src="/static/blackdot.gif" alt="" width="130" height="130" />
     </a>
   </li>
 </albums>

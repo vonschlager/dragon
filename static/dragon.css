@@ -1,5 +1,11 @@
 body {
+  background-color: black;
   padding-top: 60px;
+  color: white;
+}
+
+h3 {
+  color: orange;
 }
 
 .tooltip {
@@ -7,12 +13,70 @@ body {
 }
 
 .sidenav {
+  position: fixed;
+  top: 60px;
   width: 220px;
 }
 
-.sidenav.affix-top,
-.sidenav.affix,
-.sidenav.affix-bottom {
-  top: 60px;
-  position: fixed;
+/* accordion */
+.accordion-group {
+  border: 1px solid black;
+  border-bottom: 0px;
+  margin-bottom: 0px;
+  -webkit-border-radius: 0px;
+     -moz-border-radius: 0px;
+          border-radius: 0px;
+}
+
+.accordion-group:last-child {
+  border-bottom: 1px solid black;
+}
+
+.accordion-heading .accordion-toggle {
+  padding: 0px;
+}
+
+.accordion-inner {
+  background: black;
+  border-top: 0px;
+}
+
+.accordion-inner > ul {
+  height: 100%;
+  width: 100%;
+  padding: 0px;
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+  background: black;
+  color: orange;
+  -webkit-transition: all 0.2s ease-in-out;
+     -moz-transition: all 0.2s ease-in-out;
+       -o-transition: all 0.2s ease-in-out;
+          transition: all 0.2s ease-in-out;
+}
+
+.nav-list > li > a,
+.nav-list .nav-header {
+  text-shadow: 0 0 0;
+  padding: 0px;
+}
+
+.nav-list > .active > a,
+.nav-list > .active > a:hover,
+.nav-list > .active > a:focus {
+  background: black;
+  color: orange;
+  text-shadow: 0 0 0;
+}
+
+/* thumbnails */
+.thumbnail {
+  border: 1px solid black;
+}
+
+a.thumbnail:hover,
+a.thumbnail:focus {
+  border-color: orange;
 }

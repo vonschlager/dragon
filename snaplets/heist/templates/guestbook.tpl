@@ -1,9 +1,4 @@
 <apply template="index">
-<script>
-$(function(){
-  $('.sidenav').affix();
-});
-</script>
 <div class="row">
   <div class="span3 sidebar">
     <div class="accordion sidenav">
