@@ -1,7 +1,8 @@
 body {
   background-color: black;
-  padding-top: 60px;
+  position: relative;
   color: white;
+  min-height: 725px;
 }
 
 h3 {
@@ -12,63 +13,83 @@ h3 {
   font-size: 14px;
 }
 
-.sidenav {
-  position: fixed;
+/* header */
+
+header {
+  height: 100px;
+}
+
+/* navbar */
+
+.navbar {
+  width: 940px;
+}
+
+.navbar-inverse .nav > li > a:hover,
+.navbar-inverse .nav > li > a:focus {
+  color: orange;
+}
+
+.navbar-inverse .nav .active > a,
+.navbar-inverse .nav .active > a:hover ,
+.navbar-inverse .nav .active > a:focus {
+  background-color: orange;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eebb00), to(#cc9900));
+  background-image: -webkit-linear-gradient(top, #eebb00, #cc9900);
+  background-image: -moz-linear-gradient(top, #eebb00, #cc9900);
+  background-image: -o-linear-gradient(top, #eebb00, #cc9900);
+  background-image: linear-gradient(to bottom, #eebb00, #cc9900);
+  color: black;
+}
+
+.navbar.affix {
+  top: 0px;
+}
+
+.navbar.affix-top {
   top: 60px;
+}
+
+/* sidenav */
+
+.sidenav {
   width: 220px;
 }
 
-/* accordion */
-.accordion-group {
-  border: 1px solid black;
-  border-bottom: 0px;
-  margin-bottom: 0px;
-  -webkit-border-radius: 0px;
-     -moz-border-radius: 0px;
-          border-radius: 0px;
+.sidenav.affix {
+  top: 20px;
+  bottom: auto;
+  position: fixed;
 }
 
-.accordion-group:last-child {
-  border-bottom: 1px solid black;
+.sidenav.affix-bottom {
+  position: absolute;
+  top: auto;
+  bottom: 50px;
 }
 
-.accordion-heading .accordion-toggle {
-  padding: 0px;
-}
+/* sidenav nav-list */
 
-.accordion-inner {
-  background: black;
-  border-top: 0px;
-}
-
-.accordion-inner > ul {
-  height: 100%;
-  width: 100%;
-  padding: 0px;
+.nav > li > a {
+  text-shadow: 0 0 0;
 }
 
 .nav > li > a:hover,
 .nav > li > a:focus {
-  background: black;
+  background-color: transparent;
   color: orange;
-  -webkit-transition: all 0.2s ease-in-out;
-     -moz-transition: all 0.2s ease-in-out;
-       -o-transition: all 0.2s ease-in-out;
-          transition: all 0.2s ease-in-out;
-}
-
-.nav-list > li > a,
-.nav-list .nav-header {
-  text-shadow: 0 0 0;
-  padding: 0px;
 }
 
 .nav-list > .active > a,
-.nav-list > .active > a:hover,
-.nav-list > .active > a:focus {
-  background: black;
-  color: orange;
-  text-shadow: 0 0 0;
+.nav-list > .active > a:focus,
+.nav-list > .active > a:hover {
+  background-color: orange;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eebb00), to(#cc9900));
+  background-image: -webkit-linear-gradient(top, #eebb00, #cc9900);
+  background-image: -moz-linear-gradient(top, #eebb00, #cc9900);
+  background-image: -o-linear-gradient(top, #eebb00, #cc9900);
+  background-image: linear-gradient(to bottom, #eebb00, #cc9900);
+  color: black;
 }
 
 /* thumbnails */
@@ -79,4 +100,32 @@ h3 {
 a.thumbnail:hover,
 a.thumbnail:focus {
   border-color: orange;
+}
+
+/* footer */
+footer {
+  height: 50px;
+}
+
+/* accordion */
+.accordion {
+  margin-bottom: 0px;
+}
+
+.accordion-group {
+  border: 1px solid #252525;
+}
+
+.accordion-heading {
+  background-color: #1b1b1b;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#222222), to(#111111));
+  background-image: -webkit-linear-gradient(top, #222222, #111111);
+  background-image: -moz-linear-gradient(top, #222222, #111111);
+  background-image: -o-linear-gradient(top, #222222, #111111);
+  background-image: linear-gradient(to bottom, #222222, #111111);
+  background-repeat: repeat-x;
+}
+
+.accordion-inner {
+  border-top: 1px solid #252525;
 }

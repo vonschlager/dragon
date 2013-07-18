@@ -1,4 +1,14 @@
 <apply template="index">
+<script>
+$(function(){
+  $(".sidenav").affix({
+    offset: {
+      top: 140
+    , bottom: 50 
+    }
+  });
+});
+</script>
 <div class="row">
   <div class="span3 sidebar">
     <div class="accordion sidenav">

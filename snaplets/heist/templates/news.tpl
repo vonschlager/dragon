@@ -1,10 +1,20 @@
 <apply template="index">
+<script>
+$(function(){
+  $(".sidenav").affix({
+    offset: {
+      top: 140
+    , bottom: 50
+    }
+  });
+});
+</script>
 <div class="row">
   <div class="span3 sidebar">
     <div class="accordion sidenav">
       <sidenav>
         <div class="accordion-group">
-          <div class="accordion-heading text-centre">
+          <div class="accordion-heading">
             <a class="accordion-toggle" data-toggle="collapse" data-parent=".sidenav" href="#${year}-months">
               <year/>
             </a>
