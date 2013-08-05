@@ -43,6 +43,7 @@ routes = [ ("/admin/logowanie", with auth handleLogin)
          , ("/ksiega/:year/:month", handleGBookByYearMonth)
          , ("/galeria", handleAlbums)
          , ("/galeria/:albumid", handlePhotos)
+         , ("/zapalka", handleMatch)
          , ("/", redirect "/wiesci")
          , ("/static", serveDirectory "static")
          ]

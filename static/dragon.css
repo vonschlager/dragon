@@ -25,6 +25,12 @@ header {
   width: 940px;
 }
 
+.navbar-inner {
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+}
+
 .navbar-inverse .nav > li > a:hover,
 .navbar-inverse .nav > li > a:focus {
   color: orange;
@@ -72,6 +78,7 @@ header {
 
 .nav > li > a {
   text-shadow: 0 0 0;
+  color: #999999;
 }
 
 .nav > li > a:hover,
@@ -90,6 +97,12 @@ header {
   background-image: -o-linear-gradient(top, #eebb00, #cc9900);
   background-image: linear-gradient(to bottom, #eebb00, #cc9900);
   color: black;
+}
+
+.nav-list {
+  padding-right: 0;
+  padding-left: 0;
+  margin-bottom: 0;
 }
 
 /* thumbnails */
@@ -114,6 +127,10 @@ footer {
 
 .accordion-group {
   border: 1px solid #252525;
+  margin-bottom: 1px;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
 }
 
 .accordion-heading {
@@ -127,5 +144,17 @@ footer {
 }
 
 .accordion-inner {
+  padding: 0 15px;
   border-top: 1px solid #252525;
 }
+
+.accordion-toggle {
+  color: #999999;
+}
+
+.accordion-toggle:hover,
+.accordion-toggle:focus {
+  color: orange;
+  text-decoration: none;
+}
+
