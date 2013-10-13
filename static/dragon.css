@@ -16,7 +16,6 @@ h3 {
 /* header */
 
 header {
-  height: 100px;
 }
 
 /* navbar */
@@ -29,6 +28,18 @@ header {
   -webkit-border-radius: 0;
      -moz-border-radius: 0;
           border-radius: 0;
+}
+
+.navbar-inverse .navbar-inner {
+  background-color: black;
+  background-image: -moz-linear-gradient(top, black, black);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(black), to(black));
+  background-image: -webkit-linear-gradient(top, black, black);
+  background-image: -o-linear-gradient(top, black, black);
+  background-image: linear-gradient(to bottom, black, black);
+  background-repeat: repeat-x;
+  border-color: black;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff000000', endColorstr='#ff000000', GradientType=0);
 }
 
 .navbar-inverse .nav > li > a:hover,
@@ -53,7 +64,7 @@ header {
 }
 
 .navbar.affix-top {
-  top: 60px;
+  top: 160px;
 }
 
 /* sidenav */
@@ -126,7 +137,7 @@ footer {
 }
 
 .accordion-group {
-  border: 1px solid #252525;
+  border: 1px solid black;
   margin-bottom: 1px;
   -webkit-border-radius: 0;
      -moz-border-radius: 0;
@@ -134,18 +145,18 @@ footer {
 }
 
 .accordion-heading {
-  background-color: #1b1b1b;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#222222), to(#111111));
-  background-image: -webkit-linear-gradient(top, #222222, #111111);
-  background-image: -moz-linear-gradient(top, #222222, #111111);
-  background-image: -o-linear-gradient(top, #222222, #111111);
-  background-image: linear-gradient(to bottom, #222222, #111111);
+  background-color: black;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(black), to(black));
+  background-image: -webkit-linear-gradient(top, black, black);
+  background-image: -moz-linear-gradient(top, black, black);
+  background-image: -o-linear-gradient(top, black, black);
+  background-image: linear-gradient(to bottom, black, black);
   background-repeat: repeat-x;
 }
 
 .accordion-inner {
   padding: 0 15px;
-  border-top: 1px solid #252525;
+  border-top: 1px solid black;
 }
 
 .accordion-toggle {

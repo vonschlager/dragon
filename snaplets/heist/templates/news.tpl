@@ -3,7 +3,7 @@
 $(function(){
   $(".sidenav").affix({
     offset: {
-      top: 140
+      top: 296
     , bottom: 50
     }
   });
